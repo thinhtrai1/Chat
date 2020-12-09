@@ -1,0 +1,20 @@
+<resources>
+    <dimen name="text_10">10sp</dimen>
+    <dimen name="text_12">12sp</dimen>
+    <dimen name="text_13">13sp</dimen>
+    <dimen name="text_14">14sp</dimen>
+    <dimen name="text_15">15sp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="text_25">25sp</dimen>
+
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_2.5">2.5dp</dimen>
+    <dimen name="margin_7.5">7.5dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_15">15dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_50">50dp</dimen>
+
+    <dimen name="avatar_size">100dp</dimen>
+    <dimen name="avatar_size_radius">50dp</dimen>
+</resources>

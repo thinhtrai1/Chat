@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Chat</string>
+    <string name="please_check_the_network_connection">Please check the network connection.</string>
+    <string name="an_error_occurred_message">An error occurred: %1$s</string>
+    <string name="an_error_occurred">An error occurred. Please try again.</string>
+
+    <string name="login">Login</string>
+    <string name="username_email">Username/Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="phone">Phone</string>
+    <string name="your_name">Your name</string>
+    <string name="register">Register</string>
+    <string name="save">Save</string>
+    <string name="tv_please_enter_email">Please enter email address!</string>
+    <string name="tv_invalid_email">Invalid email address!</string>
+    <string name="tv_please_enter_password">Please enter password!</string>
+    <string name="tv_please_enter_your_name">Please enter your name!</string>
+    <string name="tv_invalid_confirm_password">Invalid confirm password!</string>
+    <string name="notification_channel_id">Chat Notification ID</string>
+</resources>

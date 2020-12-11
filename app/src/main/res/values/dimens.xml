@@ -17,4 +17,9 @@
 
     <dimen name="avatar_size">100dp</dimen>
     <dimen name="avatar_size_radius">50dp</dimen>
+
+    <dimen name="home_avatar_size">60dp</dimen>
+    <dimen name="home_avatar_size_radius">30dp</dimen>
+    <dimen name="home_option_size">40dp</dimen>
+    <dimen name="home_option_size_radius">20dp</dimen>
 </resources>

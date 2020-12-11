@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.chat.R
 import java.io.IOException
 
@@ -18,14 +19,16 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         mProgressDialog = Dialog(this)
-        mProgressDialog.setContentView(ProgressBar(this))
+        mProgressDialog.setContentView(ProgressBar(this).apply {
+            indeterminateDrawable = ResourcesCompat.getDrawable(resources, R.drawable.progress_bar, null)
+        })
         mProgressDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         mProgressDialog.setCancelable(false)
 
         mAlertDialog = AlertDialog.Builder(this).setPositiveButton(android.R.string.ok, null)
     }
 
-    protected fun showLoading(isLoading: Boolean) {
+    fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             mProgressDialog.show()
         } else {

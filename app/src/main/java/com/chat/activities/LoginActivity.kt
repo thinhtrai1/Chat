@@ -39,12 +39,14 @@ class LoginActivity : BaseActivity(), Callback<User> {
 
         if (isUpdate) {
             edtName.visibility = View.VISIBLE
+            edtPhone.visibility = View.VISIBLE
             edtConfirmPassword.visibility = View.VISIBLE
             btnLogin.text = getString(R.string.save)
             tvSignUp.visibility = View.GONE
             user = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).apply {
                 edtName.setText(name)
                 edtEmail.setText(email)
+                edtPhone.setText(phone)
                 edtPassword.setText(password)
                 edtConfirmPassword.setText(password)
                 if (image != null) {
@@ -98,7 +100,7 @@ class LoginActivity : BaseActivity(), Callback<User> {
                     Utility.apiClient.updateProfile(
                         RequestBody.create(mediaType, user?.id.toString()),
                         RequestBody.create(mediaType, edtName.text.toString().trim()),
-                        RequestBody.create(mediaType, ""),
+                        RequestBody.create(mediaType, edtPhone.text.toString().trim()),
                         RequestBody.create(mediaType, edtEmail.text.toString().trim()),
                         RequestBody.create(mediaType, edtPassword.text.toString().trim()),
                         imageFile

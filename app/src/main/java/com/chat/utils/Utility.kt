@@ -20,4 +20,8 @@ object Utility {
             }
             return retrofit!!
         }
+
+    fun getTime(milliTime: Long): String {
+        return milliTime.toString()
+    }
 }

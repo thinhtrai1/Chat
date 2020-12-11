@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.chat.R
 import com.chat.models.User
 import com.chat.utils.Constants
 import com.chat.utils.Utility
@@ -13,6 +14,7 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -27,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
                 Utility.sharedPreferences.getString(Constants.PREF_PASSWORD, "")!!
             ).enqueue(object : Callback<User> {
                 override fun onFailure(call: Call<User>, t: Throwable) {
-                    Toast.makeText(this@SplashActivity, t.message, Toast.LENGTH_SHORT).show()
+                    showToast(t)
                     startActivity(Intent(this@SplashActivity, LoginActivity::class.java)
                         .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra(Constants.EXTRA_ROOM_ID)))
                     finish()
@@ -62,6 +64,20 @@ class SplashActivity : AppCompatActivity() {
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             Log.e("NEW_FCM_TOKEN", it.result ?: "")
+        }
+    }
+
+    private fun showToast(throwable: Throwable) {
+        when {
+            throwable is IOException -> {
+                Toast.makeText(this, getString(R.string.please_check_the_network_connection), Toast.LENGTH_SHORT).show()
+            }
+            throwable.message != null -> {
+                Toast.makeText(this, getString(R.string.an_error_occurred_message, throwable.message), Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                Toast.makeText(this, getString(R.string.an_error_occurred), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

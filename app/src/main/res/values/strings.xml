@@ -5,7 +5,7 @@
     <string name="an_error_occurred">An error occurred. Please try again.</string>
 
     <string name="login">Login</string>
-    <string name="username_email">Username/Email</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="phone">Phone</string>
@@ -18,4 +18,13 @@
     <string name="tv_please_enter_your_name">Please enter your name!</string>
     <string name="tv_invalid_confirm_password">Invalid confirm password!</string>
     <string name="notification_channel_id">Chat Notification ID</string>
+    <string name="search_for_name">Search for name…</string>
+    <string name="search_for_name_or_email">Search for name or email…</string>
+    <string name="add_chat_room">New chat room</string>
+    <string name="room_name">Room name</string>
+    <string name="members">Members</string>
+    <string name="add">Add</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="created_room_successfully">Created new room successfully</string>
 </resources>

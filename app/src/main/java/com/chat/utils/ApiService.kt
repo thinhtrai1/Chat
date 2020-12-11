@@ -1,5 +1,6 @@
 package com.chat.utils
 
+import com.chat.models.ChatRoom
 import com.chat.models.User
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -18,9 +19,22 @@ interface ApiService{
     @Multipart
     @POST("updateProfile.php")
     fun updateProfile(@Part("userId") userId: RequestBody,
-                      @Part("name") address: RequestBody,
+                      @Part("name") name: RequestBody,
                       @Part("phone") phone: RequestBody,
                       @Part("email") contact_no: RequestBody,
                       @Part("password") latitude: RequestBody,
                       @Part image: MultipartBody.Part?): Call<User>
+
+    @GET("getChatRoom.php")
+    fun getChatRoom(@Query("userId") userId: Int, @Query("search") search: String, @Query("page") page: Int): Call<ArrayList<ChatRoom>>
+
+    @GET("getUser.php")
+    fun getUser(@Query("search") search: String): Call<ArrayList<User>>
+
+    @Multipart
+    @POST("createRoom.php")
+    fun createRoom(@Part("userId") userId: Int,
+                      @Part("name") name: String,
+                      @Part("member") member: String,
+                      @Part image: MultipartBody.Part?): Call<ChatRoom>
 }

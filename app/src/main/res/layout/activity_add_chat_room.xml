@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_20"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_horizontal"
+        android:text="@string/add_chat_room"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_25"
+        android:textStyle="bold" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/home_avatar_size"
+        android:layout_height="@dimen/home_avatar_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_20"
+        app:cardCornerRadius="@dimen/home_avatar_size_radius">
+
+        <ImageView
+            android:id="@+id/imvAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_launcher_round" />
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_20"
+        android:background="@drawable/bg_btn_register"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="@string/room_name"
+        android:inputType="text"
+        android:padding="@dimen/margin_10"
+        android:textColor="@color/white"
+        android:textColorHint="@color/color_3"
+        android:textSize="@dimen/text_15"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/members"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnAddMember"
+            android:layout_width="@dimen/home_avatar_size_radius"
+            android:layout_height="@dimen/home_avatar_size_radius"
+            android:background="@drawable/bg_round_white"
+            android:padding="@dimen/margin_10"
+            android:src="@drawable/ic_add" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvMember"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_20"
+        android:fontFamily="sans-serif-condensed"
+        android:padding="@dimen/margin_15"
+        android:text="@string/add"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_18"
+        android:textStyle="bold" />
+</LinearLayout>

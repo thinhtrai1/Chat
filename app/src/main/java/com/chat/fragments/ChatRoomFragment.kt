@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chat.adapters.ChatRoomRcvAdapter
 import com.chat.models.ChatRoom
@@ -25,7 +26,20 @@ class ChatRoomFragment(private val userId: Int) : BaseFragment(), Callback<Array
     override fun initComponents() {
         showLoading(true)
         mAdapter = ChatRoomRcvAdapter(mContext, mChatRooms)
+        (view as RecyclerView).adapter = mAdapter
+        (view as RecyclerView).layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        loadData(mSearchKey)
+    }
+
+    fun loadData(searchKey: String) {
+        showLoading(true)
+        mSearchKey = searchKey
         Utility.apiClient.getChatRoom(userId, mSearchKey, mCurrentPage).enqueue(this)
+    }
+
+    fun addData(room: ChatRoom) {
+        mChatRooms.add(0, room)
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

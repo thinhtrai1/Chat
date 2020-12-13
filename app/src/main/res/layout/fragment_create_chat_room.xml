@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_1"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_20"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_horizontal"
+        android:text="@string/add_chat_room"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_18"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/margin_10"
+        android:gravity="center_vertical">
+
+        <FrameLayout
+            android:background="@drawable/bg_round_white"
+            android:padding="2dp"
+            android:layout_width="@dimen/home_avatar_size"
+            android:layout_height="@dimen/home_avatar_size">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="@dimen/home_avatar_radius">
+
+                <ImageView
+                    android:id="@+id/imvAvatar"
+                    android:layout_width="match_parent"
+                    android:alpha="0.2"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_app" />
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/imvAddAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_10"
+                android:src="@drawable/ic_add" />
+        </FrameLayout>
+
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:textCursorDrawable="@null"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_register"
+            android:fontFamily="sans-serif-condensed"
+            android:hint="@string/room_name"
+            android:imeOptions="actionDone"
+            android:inputType="textCapWords"
+            android:padding="@dimen/margin_10"
+            android:textColor="@color/white"
+            android:textColorHint="@color/color_3"
+            android:textSize="@dimen/text_15"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_5"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/members"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_15"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imvAddMember"
+            android:layout_width="@dimen/home_option_size"
+            android:layout_height="@dimen/home_option_size"
+            android:background="@drawable/bg_round_white"
+            android:padding="@dimen/margin_7.5"
+            android:src="@drawable/ic_add" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvMember"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_5"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_login"
+            android:fontFamily="sans-serif-condensed"
+            android:minHeight="0dp"
+            android:paddingHorizontal="@dimen/margin_15"
+            android:paddingVertical="@dimen/margin_10"
+            android:text="@string/back"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
+            android:layout_marginVertical="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_login"
+            android:fontFamily="sans-serif-condensed"
+            android:minHeight="0dp"
+            android:paddingHorizontal="@dimen/margin_15"
+            android:paddingVertical="@dimen/margin_10"
+            android:text="@string/create"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

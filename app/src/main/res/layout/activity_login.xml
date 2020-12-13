@@ -11,12 +11,12 @@
     tools:context=".activities.LoginActivity">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/avatar_size"
-        android:layout_height="@dimen/avatar_size"
+        android:layout_width="@dimen/size_100"
+        android:layout_height="@dimen/size_100"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="@dimen/avatar_size_radius"
+        android:layout_marginBottom="@dimen/size_50"
         app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="@dimen/margin_50"
+        app:cardCornerRadius="@dimen/size_50"
         app:cardElevation="0dp">
 
         <ImageView
@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_round" />
+            android:src="@drawable/ic_app" />
     </androidx.cardview.widget.CardView>
 
     <EditText
@@ -101,11 +101,11 @@
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/avatar_size"
+        android:layout_marginTop="@dimen/size_50"
         android:background="@drawable/bg_btn_login"
         android:fontFamily="sans-serif-condensed-medium"
         android:minHeight="0dp"
-        android:paddingHorizontal="@dimen/margin_50"
+        android:paddingHorizontal="@dimen/size_50"
         android:paddingVertical="@dimen/margin_15"
         android:text="@string/login"
         android:textColor="@color/color_white_green"

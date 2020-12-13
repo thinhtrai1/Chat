@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
-    android:background="@color/color_2"
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_1"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_20"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_horizontal"
+        android:text="@string/add_member"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_18"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edtSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_20"
+        android:layout_marginHorizontal="@dimen/margin_10"
         android:background="@drawable/bg_btn_register"
         android:fontFamily="sans-serif-condensed"
         android:hint="@string/search_for_name_or_email"
@@ -39,30 +51,38 @@
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_20"
-            android:layout_marginVertical="@dimen/margin_20"
-            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginVertical="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_5"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_login"
             android:fontFamily="sans-serif-condensed"
-            android:padding="@dimen/margin_10"
+            android:minHeight="0dp"
+            android:paddingHorizontal="@dimen/margin_15"
+            android:paddingVertical="@dimen/margin_10"
             android:text="@string/cancel"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_18"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnDone"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginVertical="@dimen/margin_20"
-            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_margin="@dimen/margin_10"
+            android:layout_marginVertical="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_login"
             android:fontFamily="sans-serif-condensed"
-            android:padding="@dimen/margin_10"
+            android:minHeight="0dp"
+            android:paddingHorizontal="@dimen/margin_15"
+            android:paddingVertical="@dimen/margin_10"
             android:text="@string/done"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_18"
-            android:textStyle="bold" /></LinearLayout>
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>

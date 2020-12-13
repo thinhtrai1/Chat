@@ -7,4 +7,5 @@ class ChatRoom {
     val lastMessage: String? = null
     val lastMessageType = 0
     val lastMessageTime = 0L
+    var isHost = 0
 }

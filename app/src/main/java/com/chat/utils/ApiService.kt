@@ -29,12 +29,12 @@ interface ApiService{
     fun getChatRoom(@Query("userId") userId: Int, @Query("search") search: String, @Query("page") page: Int): Call<ArrayList<ChatRoom>>
 
     @GET("getUser.php")
-    fun getUser(@Query("search") search: String): Call<ArrayList<User>>
+    fun getUser(@Query("userId") userId: Int, @Query("search") search: String): Call<ArrayList<User>>
 
     @Multipart
     @POST("createRoom.php")
     fun createRoom(@Part("userId") userId: Int,
-                      @Part("name") name: String,
-                      @Part("member") member: String,
+                      @Part("name") name: RequestBody,
+                      @Part("member") member: RequestBody,
                       @Part image: MultipartBody.Part?): Call<ChatRoom>
 }

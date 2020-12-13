@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.chat.R
 import java.io.IOException
@@ -34,7 +35,9 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mProgressDialog = Dialog(mContext)
-        mProgressDialog.setContentView(ProgressBar(mContext))
+        mProgressDialog.setContentView(ProgressBar(mContext).apply {
+            indeterminateDrawable = ResourcesCompat.getDrawable(resources, R.drawable.progress_bar, null)
+        })
         mProgressDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         mProgressDialog.setCancelable(false)
 

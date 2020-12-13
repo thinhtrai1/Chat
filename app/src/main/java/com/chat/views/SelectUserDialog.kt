@@ -9,7 +9,9 @@ import com.chat.R
 import com.chat.activities.BaseActivity
 import com.chat.adapters.UserRcvAdapter
 import com.chat.models.User
+import com.chat.utils.Constants
 import com.chat.utils.Utility
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.dialog_search_list_user.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,13 +35,14 @@ class SelectUserDialog(private val context: BaseActivity, selectedUser: ArrayLis
         }
         btnDone.setOnClickListener {
             dismiss()
-            callback.onFinishSelected(mAdapter.selectedUser)
+            callback.onFinishSelected()
         }
 
         edtSearch.setOnEditorActionListener { textView, i, _ ->
             if (i == EditorInfo.IME_ACTION_SEARCH) {
                 context.showLoading(true)
-                Utility.apiClient.getUser(textView.text.toString()).enqueue(this)
+                val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id
+                Utility.apiClient.getUser(userId, textView.text.toString()).enqueue(this)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
@@ -47,7 +50,7 @@ class SelectUserDialog(private val context: BaseActivity, selectedUser: ArrayLis
     }
 
     interface IOnSelectedListener {
-        fun onFinishSelected(data: ArrayList<User>)
+        fun onFinishSelected()
         fun onError(error: Any?)
     }
 

@@ -28,14 +28,19 @@ class ChatRoomRcvAdapter(private val context: Context, private val mRooms: Array
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         mRooms[position].let {
             if (it.image != null) {
-                Picasso.get().load(Constants.BASE_URL + it.image).placeholder(R.drawable.ic_launcher_round)
-                    .resize(200, 200).into(holder.imageView)
+                Picasso.get().load(Constants.BASE_URL + it.image).placeholder(R.drawable.ic_app)
+                    .resize(200, 200).centerCrop().into(holder.imageView)
             } else {
-                holder.imageView.setImageResource(R.drawable.ic_launcher_round)
+                holder.imageView.setImageResource(R.drawable.ic_app)
             }
             holder.tvName.text = it.name
             holder.tvLastMessage.text = it.lastMessage
-            holder.tvTime.text = Utility.getTime(it.lastMessageTime)
+            holder.tvTime.text = Utility.getTimeDisplayString(it.lastMessageTime)
+            if (it.isHost == 1) {
+                holder.imvSetting.visibility = View.VISIBLE
+            } else {
+                holder.imvSetting.visibility = View.GONE
+            }
         }
     }
 
@@ -44,5 +49,6 @@ class ChatRoomRcvAdapter(private val context: Context, private val mRooms: Array
         internal val tvName: TextView = view.findViewById(R.id.tvName)
         internal val tvLastMessage: TextView = view.findViewById(R.id.tvMessage)
         internal val tvTime: TextView = view.findViewById(R.id.tvTime)
+        internal val imvSetting: ImageView = view.findViewById(R.id.imvSetting)
     }
 }

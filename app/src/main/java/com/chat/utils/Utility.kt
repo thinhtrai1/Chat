@@ -21,7 +21,7 @@ object Utility {
             return retrofit!!
         }
 
-    fun getTime(milliTime: Long): String {
+    fun getTimeDisplayString(milliTime: Long): String {
         return milliTime.toString()
     }
 }

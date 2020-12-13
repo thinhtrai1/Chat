@@ -17,7 +17,6 @@ import com.chat.R
 import com.chat.utils.Constants
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.gson.Gson
 
 class ChatMessagingService : FirebaseMessagingService() {
 
@@ -76,7 +75,7 @@ class ChatMessagingService : FirebaseMessagingService() {
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notificationBuilder = NotificationCompat.Builder(this, getString(R.string.notification_channel_id))
-            .setSmallIcon(R.drawable.ic_launcher_round)
+            .setSmallIcon(R.drawable.ic_app)
             .setContentTitle(notificationTitle ?: getString(R.string.app_name))
             .setContentText(notificationMessage)
 //            .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))

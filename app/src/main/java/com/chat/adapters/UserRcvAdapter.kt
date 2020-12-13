@@ -13,7 +13,11 @@ import com.chat.models.User
 import com.chat.utils.Constants
 import com.squareup.picasso.Picasso
 
-class UserRcvAdapter(private val context: Context, private val mUsers: ArrayList<User>, val selectedUser: ArrayList<User>, private val isSelected: Boolean) : RecyclerView.Adapter<UserRcvAdapter.ViewHolder>() {
+class UserRcvAdapter(private val context: Context,
+                     private val mUsers: ArrayList<User>,
+                     private val selectedUser: ArrayList<User>,
+                     private val isSelected: Boolean) : RecyclerView.Adapter<UserRcvAdapter.ViewHolder>() {
+
     private val selectedIds = selectedUser.map { it.id } as ArrayList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,10 +33,10 @@ class UserRcvAdapter(private val context: Context, private val mUsers: ArrayList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         mUsers[position].let {
             if (it.image != null) {
-                Picasso.get().load(Constants.BASE_URL + it.image).placeholder(R.drawable.ic_launcher_round)
+                Picasso.get().load(Constants.BASE_URL + it.image).placeholder(R.drawable.ic_app)
                     .resize(200, 200).into(holder.imvAvatar)
             } else {
-                holder.imvAvatar.setImageResource(R.drawable.ic_launcher_round)
+                holder.imvAvatar.setImageResource(R.drawable.ic_app)
             }
             holder.tvName.text = it.name
             holder.tvEmail.text = it.email
@@ -55,6 +59,7 @@ class UserRcvAdapter(private val context: Context, private val mUsers: ArrayList
                 holder.cbSelect.visibility = View.GONE
                 holder.imvDelete.setOnClickListener { _ ->
                     mUsers.remove(it)
+                    notifyItemRemoved(holder.adapterPosition)
                 }
             }
         }

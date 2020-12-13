@@ -51,7 +51,7 @@ class LoginActivity : BaseActivity(), Callback<User> {
                 edtConfirmPassword.setText(password)
                 if (image != null) {
                     Picasso.get().load(Constants.BASE_URL + image)
-                        .resize(400, 400).centerCrop().placeholder(R.drawable.ic_launcher_round).into(imvLogo)
+                        .resize(400, 400).centerCrop().placeholder(R.drawable.ic_app).into(imvLogo)
                 }
             }
             imvLogo.setOnClickListener {

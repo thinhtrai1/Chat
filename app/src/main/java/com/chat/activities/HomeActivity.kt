@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.animation.AnticipateOvershootInterpolator
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
@@ -57,6 +56,7 @@ class HomeActivity : BaseActivity() {
                 mConstraintSet.connect(R.id.viewProfile, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
                 TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(200))
                 mConstraintSet.applyTo(layoutProfile)
+                edtSearch.requestFocus()
                 isSearch = true
             }
         }

@@ -19,6 +19,7 @@
     <string name="tv_invalid_confirm_password">Invalid confirm password!</string>
     <string name="notification_channel_id">Chat Notification ID</string>
     <string name="search_for_name">Search for name…</string>
+    <string name="search_message">Search message…</string>
     <string name="search_for_name_or_email">Search for name or email…</string>
     <string name="add_chat_room">New chat room</string>
     <string name="room_name">Room name</string>

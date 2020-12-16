@@ -1,6 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/color_1"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/margin_10"
+        android:paddingTop="@dimen/margin_5"
+        android:paddingEnd="@dimen/margin_10"
+        android:paddingBottom="@dimen/margin_15">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/home_avatar_size"
+            android:layout_height="@dimen/home_avatar_size"
+            app:cardCornerRadius="@dimen/home_avatar_radius">
+
+            <ImageView
+                android:id="@+id/imvAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_app" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/viewProfile"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_25"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/viewSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_btn_register"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="parent">
+
+                <EditText
+                    android:id="@+id/edtSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="@dimen/margin_10"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:fontFamily="sans-serif-condensed"
+                    android:hint="@string/search_for_name"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/color_2"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_15"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imvClose"
+                    android:layout_width="@dimen/home_option_size"
+                    android:layout_height="@dimen/home_option_size"
+                    android:layout_marginHorizontal="@dimen/margin_5"
+                    android:src="@drawable/ic_close" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/imvSearch"
+            android:layout_width="@dimen/home_option_size"
+            android:layout_height="@dimen/home_option_size"
+            android:src="@drawable/ic_search" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvChat"
+        android:layout_width="match_parent"
+        tools:listitem="@layout/item_rcv_chat"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/edtMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_register"
+            android:fontFamily="sans-serif-condensed"
+            android:maxLines="5"
+            android:padding="@dimen/margin_10"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_15" />
+
+        <ImageView
+            android:id="@+id/imvSend"
+            android:layout_width="@dimen/home_option_size"
+            android:layout_height="@dimen/home_option_size"
+            android:layout_marginStart="@dimen/margin_10"
+            android:src="@drawable/ic_photo" />
+
+        <ProgressBar
+            android:id="@+id/progressBarSend"
+            android:indeterminateDrawable="@drawable/progress_bar"
+            android:layout_width="@dimen/home_option_size"
+            android:layout_height="@dimen/home_option_size"
+            android:layout_marginStart="@dimen/margin_10"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>

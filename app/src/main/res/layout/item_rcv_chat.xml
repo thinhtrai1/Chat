@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_5"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:text="Thinh's Duc"
+            android:fontFamily="sans-serif-condensed"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_13" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:text="12/11/2020 17:04"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view_space_left"
+            android:layout_width="0dp"
+            android:visibility="gone"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_2.5"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:text="How do you love mw do you love mw do you love mw do you love mw do you love me?"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:layout_weight="5"
+            android:background="@drawable/bg_item_rcv_chat"
+            android:elevation="@dimen/margin_2.5"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingHorizontal="@dimen/margin_10"
+            android:paddingTop="@dimen/margin_5"
+            android:paddingBottom="@dimen/margin_7.5"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_12" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_2.5"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_weight="5"
+            app:cardCornerRadius="@dimen/margin_10"
+            app:cardElevation="@dimen/margin_2.5">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true" />
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:id="@+id/view_space_right"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>

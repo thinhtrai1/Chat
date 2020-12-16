@@ -16,6 +16,7 @@ import com.chat.fragments.CreateRoomFragment
 import com.chat.models.ChatRoom
 import com.chat.utils.Constants
 import com.chat.utils.Utility
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 
 class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback: CreateRoomFragment.IOnCreatedChatRoom, private val mRooms: ArrayList<ChatRoom>) :
@@ -61,8 +62,8 @@ class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback
                     }
                 }
             }
-            holder.itemView.setOnClickListener {
-                mContext.startActivity(Intent(mContext, ChatActivity::class.java))
+            holder.itemView.setOnClickListener { _ ->
+                mContext.startActivity(Intent(mContext, ChatActivity::class.java).putExtra("room", Gson().toJson(it)))
             }
         }
     }

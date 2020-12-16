@@ -1,60 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin_5"
-    android:orientation="vertical">
+    android:layout_marginTop="@dimen/margin_7.5">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardAvatar"
+        android:layout_width="@dimen/home_room_size"
+        android:layout_height="@dimen/home_room_size"
         android:layout_marginStart="@dimen/margin_10"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="@dimen/home_room_radius"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imvAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_app" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_5"
+        android:fontFamily="sans-serif-condensed"
+        android:singleLine="true"
+        android:text="Thinh's Duc"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_13"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tvTime"
+        app:layout_constraintStart_toEndOf="@id/cardAvatar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_10"
-        android:gravity="bottom">
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:text="Thinh's Duc"
-            android:fontFamily="sans-serif-condensed"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_13" />
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="12/11/2020 17:04"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_10" />
-    </LinearLayout>
+        android:fontFamily="sans-serif-condensed"
+        android:text="12/11/2020 17:04"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:layout_constraintTop_toBottomOf="@id/tvName">
 
         <View
-            android:id="@+id/view_space_left"
+            android:id="@+id/viewSpaceLeft"
             android:layout_width="0dp"
-            android:visibility="gone"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/tv_message"
+            android:id="@+id/tvMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_10"
             android:layout_marginTop="@dimen/margin_2.5"
-            android:layout_marginEnd="@dimen/margin_10"
-            android:text="How do you love mw do you love mw do you love mw do you love mw do you love me?"
             android:layout_marginBottom="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_10"
             android:layout_weight="5"
             android:background="@drawable/bg_item_rcv_chat"
             android:elevation="@dimen/margin_2.5"
@@ -62,33 +78,32 @@
             android:paddingHorizontal="@dimen/margin_10"
             android:paddingTop="@dimen/margin_5"
             android:paddingBottom="@dimen/margin_7.5"
+            android:text="How do you love mw do you love mw do you love mw do you love mw do you love me?"
             android:textColor="@color/white"
             android:textSize="@dimen/text_12" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewImage"
+            android:id="@+id/cardMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_2.5"
-            android:visibility="gone"
+            android:layout_marginVertical="@dimen/margin_2.5"
             android:layout_marginEnd="@dimen/margin_10"
-            android:layout_marginBottom="@dimen/margin_10"
             android:layout_weight="5"
+            android:visibility="gone"
             app:cardCornerRadius="@dimen/margin_10"
             app:cardElevation="@dimen/margin_2.5">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imvMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true" />
         </androidx.cardview.widget.CardView>
 
         <View
-            android:id="@+id/view_space_right"
+            android:id="@+id/viewSpaceRight"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
     </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

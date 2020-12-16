@@ -1,5 +1,6 @@
 package com.chat.utils
 
+import com.chat.models.Chat
 import com.chat.models.ChatRoom
 import com.chat.models.User
 import okhttp3.MultipartBody
@@ -37,4 +38,12 @@ interface ApiService{
                       @Part("name") name: RequestBody,
                       @Part("member") member: RequestBody,
                       @Part image: MultipartBody.Part?): Call<ChatRoom>
+
+    @Multipart
+    @POST("sendMessage.php")
+    fun sendMessage(@Part("userId") userId: RequestBody,
+                      @Part("roomId") roomId: RequestBody,
+                      @Part("type") type: RequestBody,
+                      @Part("message") message: RequestBody?,
+                      @Part file: MultipartBody.Part?): Call<Chat>
 }

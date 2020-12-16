@@ -74,7 +74,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:fontFamily="sans-serif-condensed"
-                    android:hint="@string/search_for_name"
+                    android:hint="@string/search_message"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:textColor="@color/white"
@@ -124,9 +124,11 @@
             android:layout_weight="1"
             android:background="@drawable/bg_btn_register"
             android:fontFamily="sans-serif-condensed"
+            android:hint="@string/i_love_u"
+            android:textColor="@color/white"
+            android:textColorHint="@color/color_2"
             android:maxLines="5"
             android:padding="@dimen/margin_10"
-            android:textColor="@color/black"
             android:textSize="@dimen/text_15" />
 
         <ImageView

@@ -34,7 +34,7 @@ class UserRcvAdapter(private val context: Context,
         mUsers[position].let {
             if (it.image != null) {
                 Picasso.get().load(Constants.BASE_URL + it.image).placeholder(R.drawable.ic_app)
-                    .resize(200, 200).into(holder.imvAvatar)
+                    .resize(200, 200).centerCrop().into(holder.imvAvatar)
             } else {
                 holder.imvAvatar.setImageResource(R.drawable.ic_app)
             }

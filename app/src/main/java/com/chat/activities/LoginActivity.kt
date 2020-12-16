@@ -93,8 +93,8 @@ class LoginActivity : BaseActivity(), Callback<User> {
                 isUpdate -> {
                     var imageFile: MultipartBody.Part? = null
                     imageUri?.getRealPath()?.let {
-                        val avatarRequest = RequestBody.create(MediaType.parse("image/*"), it)
-                        imageFile = MultipartBody.Part.createFormData("image", it.name, avatarRequest)
+                        val mediaType = RequestBody.create(MediaType.parse("image/*"), it)
+                        imageFile = MultipartBody.Part.createFormData("image", it.name, mediaType)
                     }
                     val mediaType = MediaType.parse("text/plain")
                     Utility.apiClient.updateProfile(

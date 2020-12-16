@@ -6,18 +6,21 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chat.R
-import com.chat.activities.BaseActivity
+import com.chat.activities.HomeActivity
 import com.chat.adapters.UserRcvAdapter
 import com.chat.models.ChatRoom
 import com.chat.models.User
+import com.chat.utils.Constants
 import com.chat.utils.Utility
-import com.chat.views.SelectUserDialog
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_create_chat_room.*
 import okhttp3.MediaType
@@ -28,16 +31,18 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-class CreateRoomFragment(private val userId: Int, private val callback: IOnCreatedChatRoom): BaseFragment() {
+class CreateRoomFragment(private val callback: IOnCreatedChatRoom, private val mRoomId: Int?): BaseFragment() {
     private val mMembers = ArrayList<User>()
     private lateinit var mAdapter: UserRcvAdapter
     private var imageUri: Uri? = null
 
-    override fun initLayout(): Int {
-        return R.layout.fragment_create_chat_room
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_create_chat_room, container, false)
     }
 
-    override fun initComponents() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         mAdapter = UserRcvAdapter(mContext, mMembers, ArrayList(), false)
         rcvMember.adapter = mAdapter
         rcvMember.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
@@ -55,19 +60,23 @@ class CreateRoomFragment(private val userId: Int, private val callback: IOnCreat
         }
 
         imvAddMember.setOnClickListener {
-            SelectUserDialog(mContext as BaseActivity, mMembers, object : SelectUserDialog.IOnSelectedListener {
-                override fun onFinishSelected() {
-                    mAdapter.notifyDataSetChanged()
-                }
+            (activity as HomeActivity).addFragment(
+                SelectUserFragment(
+                    mMembers,
+                    object : SelectUserFragment.IOnSelectedListener {
+                        override fun onFinishSelected() {
+                            mAdapter.notifyDataSetChanged()
+                        }
 
-                override fun onError(error: Any?) {
-                    if (error is Throwable) {
-                        showAlert(error)
-                    } else {
-                        showAlert(error.toString())
-                    }
-                }
-            }).show()
+                        override fun onError(error: Any?) {
+                            if (error is Throwable) {
+                                showAlert(error)
+                            } else {
+                                showAlert(error.toString())
+                            }
+                        }
+                    })
+            )
         }
 
         btnCreate.setOnClickListener {
@@ -79,7 +88,7 @@ class CreateRoomFragment(private val userId: Int, private val callback: IOnCreat
             }
             val mediaType = MediaType.parse("text/plain")
             Utility.apiClient.createRoom(
-                userId,
+                Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id,
                 RequestBody.create(mediaType, edtName.text.toString().trim()),
                 RequestBody.create(mediaType, Gson().toJson(mMembers.map { it.id })),
                 imageFile
@@ -92,7 +101,8 @@ class CreateRoomFragment(private val userId: Int, private val callback: IOnCreat
                 override fun onResponse(call: Call<ChatRoom>, response: Response<ChatRoom>) {
                     if (response.isSuccessful) {
                         response.body()?.let {
-                            callback.onCreated(it)
+                            callback.onCreated(-1, it)
+                            activity?.supportFragmentManager?.popBackStackImmediate()
                         }
                     } else {
                         showAlert(response.errorBody()?.string())
@@ -140,6 +150,6 @@ class CreateRoomFragment(private val userId: Int, private val callback: IOnCreat
     }
 
     interface IOnCreatedChatRoom {
-        fun onCreated(room: ChatRoom)
+        fun onCreated(position: Int, room: ChatRoom)
     }
 }

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_1"
+    android:clickable="true"
     android:orientation="vertical">
 
     <TextView
@@ -32,6 +33,12 @@
         android:textColorHint="@color/color_3"
         android:textSize="@dimen/text_15"
         android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_10"
+        android:background="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvSelectMember"

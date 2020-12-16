@@ -1,7 +1,8 @@
-package com.chat.views
+package com.chat.fragments
 
-import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,35 +13,40 @@ import com.chat.models.User
 import com.chat.utils.Constants
 import com.chat.utils.Utility
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.dialog_search_list_user.*
+import kotlinx.android.synthetic.main.fragment_select_user.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SelectUserDialog(private val context: BaseActivity, selectedUser: ArrayList<User>, private val callback: IOnSelectedListener) : Dialog(context), Callback<ArrayList<User>> {
+class SelectUserFragment(private val selectedUser: ArrayList<User>, private val callback: IOnSelectedListener) : BaseFragment(), Callback<ArrayList<User>> {
     private val memberList = ArrayList<User>()
-    private val mAdapter = UserRcvAdapter(context, memberList, selectedUser, true)
+    private lateinit var mAdapter: UserRcvAdapter
+    private lateinit var mActivity: BaseActivity
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_select_user, container, false)
+    }
 
-        setContentView(R.layout.dialog_search_list_user)
-        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mAdapter = UserRcvAdapter(mContext, memberList, selectedUser, true)
+        mActivity = mContext as BaseActivity
 
         rcvSelectMember.adapter = mAdapter
         rcvSelectMember.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         btnCancel.setOnClickListener {
-            dismiss()
+            mActivity.supportFragmentManager.popBackStackImmediate()
         }
         btnDone.setOnClickListener {
-            dismiss()
+            mActivity.supportFragmentManager.popBackStackImmediate()
             callback.onFinishSelected()
         }
 
         edtSearch.setOnEditorActionListener { textView, i, _ ->
             if (i == EditorInfo.IME_ACTION_SEARCH) {
-                context.showLoading(true)
+                mActivity.showLoading(true)
                 val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id
                 Utility.apiClient.getUser(userId, textView.text.toString()).enqueue(this)
                 return@setOnEditorActionListener true
@@ -55,7 +61,7 @@ class SelectUserDialog(private val context: BaseActivity, selectedUser: ArrayLis
     }
 
     override fun onFailure(call: Call<ArrayList<User>>, t: Throwable) {
-        context.showLoading(false)
+        mActivity.showLoading(false)
         callback.onError(t)
     }
 
@@ -69,6 +75,6 @@ class SelectUserDialog(private val context: BaseActivity, selectedUser: ArrayLis
         } else {
             callback.onError(response.errorBody()?.string())
         }
-        context.showLoading(false)
+        mActivity.showLoading(false)
     }
 }

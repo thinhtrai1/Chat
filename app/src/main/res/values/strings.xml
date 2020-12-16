@@ -26,7 +26,8 @@
     <string name="create">Create</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
-    <string name="created_room_successfully">Created new room successfully</string>
+    <string name="created_room_successfully">Created successfully</string>
+    <string name="updated_room_successfully">Updated successfully</string>
     <string name="txt_tap_again_to_exit">Tap again to exit</string>
     <string name="back">Back</string>
     <string name="add_member">Add member</string>

@@ -15,20 +15,13 @@ import com.chat.R
 import java.io.IOException
 
 abstract class BaseFragment : Fragment() {
-    lateinit var mContext: Context
+    protected lateinit var mContext: Context
     private lateinit var mProgressDialog: Dialog
     private lateinit var mAlertDialog: AlertDialog.Builder
-
-    protected abstract fun initLayout(): Int
-    protected abstract fun initComponents()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(initLayout(), container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,8 +35,6 @@ abstract class BaseFragment : Fragment() {
         mProgressDialog.setCancelable(false)
 
         mAlertDialog = AlertDialog.Builder(mContext).setPositiveButton(android.R.string.ok, null)
-
-        initComponents()
     }
 
     protected fun showLoading(isLoading: Boolean) {

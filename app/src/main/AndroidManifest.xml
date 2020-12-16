@@ -27,12 +27,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.chat.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name=".activities.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:name="com.chat.activities.ChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
 
         <receiver android:name=".services.ChatMessagingBroadcast" />
 

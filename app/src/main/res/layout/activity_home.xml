@@ -19,7 +19,7 @@
             android:paddingStart="@dimen/margin_10"
             android:paddingTop="@dimen/margin_5"
             android:paddingEnd="@dimen/margin_10"
-            android:paddingBottom="@dimen/margin_15">
+            android:paddingBottom="@dimen/margin_10">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="@dimen/home_avatar_size"
@@ -130,6 +130,11 @@
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_menu" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white" />
 
         <FrameLayout
             android:id="@+id/frameHome"

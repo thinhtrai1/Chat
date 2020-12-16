@@ -8,7 +8,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
-interface ApiService{
+interface ApiService {
     @FormUrlEncoded
     @POST("login.php")
     fun login(@Field("email") email: String, @Field("password") password: String): Call<User>
@@ -19,12 +19,14 @@ interface ApiService{
 
     @Multipart
     @POST("updateProfile.php")
-    fun updateProfile(@Part("userId") userId: RequestBody,
-                      @Part("name") name: RequestBody,
-                      @Part("phone") phone: RequestBody,
-                      @Part("email") contact_no: RequestBody,
-                      @Part("password") latitude: RequestBody,
-                      @Part image: MultipartBody.Part?): Call<User>
+    fun updateProfile(
+        @Part("userId") userId: RequestBody,
+        @Part("name") name: RequestBody,
+        @Part("phone") phone: RequestBody,
+        @Part("email") contact_no: RequestBody,
+        @Part("password") latitude: RequestBody,
+        @Part image: MultipartBody.Part?
+    ): Call<User>
 
     @GET("getChatRoom.php")
     fun getChatRoom(@Query("userId") userId: Int, @Query("search") search: String, @Query("page") page: Int): Call<ArrayList<ChatRoom>>
@@ -34,16 +36,28 @@ interface ApiService{
 
     @Multipart
     @POST("createRoom.php")
-    fun createRoom(@Part("userId") userId: Int,
-                      @Part("name") name: RequestBody,
-                      @Part("member") member: RequestBody,
-                      @Part image: MultipartBody.Part?): Call<ChatRoom>
+    fun createRoom(
+        @Part("userId") userId: Int,
+        @Part("name") name: RequestBody,
+        @Part("member") member: RequestBody,
+        @Part image: MultipartBody.Part?
+    ): Call<ChatRoom>
+
+    @GET("getMessage.php")
+    fun getMessage(
+        @Query("userId") userId: Int,
+        @Query("roomId") roomId: Int,
+        @Query("search") search: String,
+        @Query("latestTime") latestTime: Long
+    ): Call<ArrayList<Chat>>
 
     @Multipart
     @POST("sendMessage.php")
-    fun sendMessage(@Part("userId") userId: RequestBody,
-                      @Part("roomId") roomId: RequestBody,
-                      @Part("type") type: RequestBody,
-                      @Part("message") message: RequestBody?,
-                      @Part file: MultipartBody.Part?): Call<Chat>
+    fun sendMessage(
+        @Part("userId") userId: RequestBody,
+        @Part("roomId") roomId: RequestBody,
+        @Part("type") type: RequestBody,
+        @Part("message") message: RequestBody?,
+        @Part file: MultipartBody.Part?
+    ): Call<Chat>
 }

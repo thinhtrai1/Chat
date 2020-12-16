@@ -34,13 +34,6 @@ import retrofit2.Response
 import java.io.File
 
 class ChatActivity : BaseActivity(), Callback<Chat> {
-    private val mUser: User = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)
-    private var isSearch = false
-    private val mConstraintSet = ConstraintSet()
-    private val mChatList = ArrayList<Chat>()
-    private lateinit var mAdapter: ChatRcvAdapter
-    private lateinit var mRoom: ChatRoom
-
     companion object {
         private const val IMAGE_LIBRARY_REQUEST_CODE = 1001
         private const val IMAGE_CAMERA_REQUEST_CODE = 1002
@@ -48,6 +41,41 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         private const val VIDEO_CAMERA_REQUEST_CODE = 1004
         private const val AUDIO_LIBRARY_REQUEST_CODE = 1005
         private const val AUDIO_CAMERA_REQUEST_CODE = 1006
+    }
+
+    private val mUser: User = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)
+    private var isSearch = false
+    private val mConstraintSet = ConstraintSet()
+    private val mChatList = ArrayList<Chat>()
+    private lateinit var mAdapter: ChatRcvAdapter
+    private lateinit var mRoom: ChatRoom
+    private val mGetMessageCallback: Callback<ArrayList<Chat>> = object : Callback<ArrayList<Chat>> {
+        override fun onFailure(call: Call<ArrayList<Chat>>, t: Throwable) {
+            showLoading(false)
+            showAlert(t)
+        }
+
+        override fun onResponse(call: Call<ArrayList<Chat>>, response: Response<ArrayList<Chat>>) {
+            showLoading(false)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    mChatList.addAll(0, it)
+                    mAdapter.notifyDataSetChanged()
+                }
+            } else {
+                showAlert(response.errorBody()?.string())
+            }
+        }
+    }
+
+    private fun loadData() {
+        showLoading(true)
+        Utility.apiClient.getMessage(
+            mUser.id,
+            mRoom.id,
+            edtSearch.text.toString(),
+            if (mChatList.isNotEmpty()) mChatList[0].time else 0
+        ).enqueue(mGetMessageCallback)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +117,7 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
             mConstraintSet.applyTo(layoutProfile)
             edtSearch.setText("")
             isSearch = false
+            loadData()
         }
 
         edtMessage.addTextChangedListener(object : TextWatcher {
@@ -125,8 +154,6 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         }
     }
 
-    private fun loadData() {}
-
     private fun sendMessage(type: Int, message: String?, file: File?) {
         val mediaType: MediaType? = MediaType.parse("text/plain")
         var messageData: RequestBody? = null
@@ -146,6 +173,27 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
             messageData,
             fileData
         ).enqueue(this)
+    }
+
+    override fun onResponse(call: Call<Chat>, response: Response<Chat>) {
+        showLoading(false)
+        if (response.isSuccessful) {
+            response.body()?.let {
+                mChatList.add(it)
+                mAdapter.notifyItemInserted(mChatList.lastIndex)
+                rcvChat.scrollToPosition(mChatList.lastIndex)
+                if (it.type == 0) {
+                    edtMessage.setText("")
+                }
+            }
+        } else {
+            showAlert(response.errorBody()?.string())
+        }
+    }
+
+    override fun onFailure(call: Call<Chat>, t: Throwable) {
+        showLoading(false)
+        showAlert(t)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -178,26 +226,5 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
             }
         }
         return null
-    }
-
-    override fun onFailure(call: Call<Chat>, t: Throwable) {
-        showLoading(false)
-        showAlert(t)
-    }
-
-    override fun onResponse(call: Call<Chat>, response: Response<Chat>) {
-        showLoading(false)
-        if (response.isSuccessful) {
-            response.body()?.let {
-                mChatList.add(it)
-                mAdapter.notifyItemInserted(mChatList.lastIndex)
-                rcvChat.scrollToPosition(mChatList.lastIndex)
-                if (it.type == 0) {
-                    edtMessage.setText("")
-                }
-            }
-        } else {
-            showAlert(response.errorBody()?.string())
-        }
     }
 }

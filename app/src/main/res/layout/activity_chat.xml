@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/color_1"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:paddingStart="@dimen/margin_10"
         android:paddingTop="@dimen/margin_5"
         android:paddingEnd="@dimen/margin_10"
-        android:paddingBottom="@dimen/margin_15">
+        android:paddingBottom="@dimen/margin_10">
 
         <androidx.cardview.widget.CardView
             android:layout_width="@dimen/home_avatar_size"
@@ -69,7 +69,6 @@
                     android:id="@+id/edtSearch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="@dimen/margin_10"
                     android:layout_marginStart="@dimen/margin_10"
                     android:layout_weight="1"
                     android:background="@null"
@@ -77,6 +76,7 @@
                     android:hint="@string/search_message"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
+                    android:paddingVertical="@dimen/margin_10"
                     android:textColor="@color/white"
                     android:textColorHint="@color/color_2"
                     android:textCursorDrawable="@null"
@@ -99,23 +99,29 @@
             android:src="@drawable/ic_search" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/white" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvChat"
         android:layout_width="match_parent"
-        tools:listitem="@layout/item_rcv_chat"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        tools:listitem="@layout/item_rcv_chat" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10"
-        android:gravity="center_vertical">
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:padding="@dimen/margin_10">
 
         <EditText
             android:id="@+id/edtMessage"
@@ -125,10 +131,10 @@
             android:background="@drawable/bg_btn_register"
             android:fontFamily="sans-serif-condensed"
             android:hint="@string/i_love_u"
-            android:textColor="@color/white"
-            android:textColorHint="@color/color_2"
             android:maxLines="5"
             android:padding="@dimen/margin_10"
+            android:textColor="@color/white"
+            android:textColorHint="@color/color_2"
             android:textSize="@dimen/text_15" />
 
         <ImageView
@@ -140,10 +146,10 @@
 
         <ProgressBar
             android:id="@+id/progressBarSend"
-            android:indeterminateDrawable="@drawable/progress_bar"
             android:layout_width="@dimen/home_option_size"
             android:layout_height="@dimen/home_option_size"
             android:layout_marginStart="@dimen/margin_10"
+            android:indeterminateDrawable="@drawable/progress_bar"
             android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

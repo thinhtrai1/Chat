@@ -40,8 +40,21 @@ class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback
                 holder.imageView.setImageResource(R.drawable.ic_app)
             }
             holder.tvName.text = it.name
-            holder.tvLastMessage.text = it.lastMessage
             holder.tvTime.text = Utility.getTimeDisplayString(it.lastMessageTime)
+            when (it.lastMessageType) {
+                0 -> {
+                    holder.tvLastMessage.text = it.lastMessage
+                }
+                1 -> {
+                    holder.tvLastMessage.text = mContext.getString(R.string.image)
+                }
+                2 -> {
+                    holder.tvLastMessage.text = mContext.getString(R.string.video)
+                }
+                3 -> {
+                    holder.tvLastMessage.text = mContext.getString(R.string.audio)
+                }
+            }
             if (it.isHost == 1) {
                 holder.imvSetting.visibility = View.VISIBLE
                 holder.imvSetting.setOnClickListener { _ ->

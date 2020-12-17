@@ -33,4 +33,7 @@
     <string name="back">Back</string>
     <string name="add_member">Add member</string>
     <string name="i_love_u">I miss you…</string>
+    <string name="image">[Image…]</string>
+    <string name="video">[Video…]</string>
+    <string name="audio">[Audio…]</string>
 </resources>

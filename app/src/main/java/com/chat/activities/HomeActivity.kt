@@ -54,7 +54,7 @@ class HomeActivity : BaseActivity() {
                 mConstraintSet.connect(R.id.viewSearch, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
                 mConstraintSet.clear(R.id.viewProfile, ConstraintSet.TOP)
                 mConstraintSet.connect(R.id.viewProfile, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-                TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(200))
+                TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(100))
                 mConstraintSet.applyTo(layoutProfile)
                 edtSearch.requestFocus()
                 isSearch = true
@@ -67,7 +67,7 @@ class HomeActivity : BaseActivity() {
             mConstraintSet.connect(R.id.viewSearch, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
             mConstraintSet.connect(R.id.viewProfile, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
             mConstraintSet.connect(R.id.viewProfile, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-            TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(200))
+            TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(100))
             mConstraintSet.applyTo(layoutProfile)
             edtSearch.setText("")
             isSearch = false

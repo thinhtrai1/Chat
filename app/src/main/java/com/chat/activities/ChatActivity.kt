@@ -72,7 +72,7 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         showLoading(true)
         Utility.apiClient.getMessage(
             mUser.id,
-            mRoom.id,
+            mRoom.roomId,
             edtSearch.text.toString(),
             if (mChatList.isNotEmpty()) mChatList[0].time else 0
         ).enqueue(mGetMessageCallback)
@@ -90,6 +90,8 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         mAdapter = ChatRcvAdapter(this, mChatList, mUser.id)
         rcvChat.adapter = mAdapter
         rcvChat.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        loadData()
 
         imvSearch.setOnClickListener {
             if (isSearch) {
@@ -145,7 +147,7 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
                     startActivityForResult(intent, IMAGE_LIBRARY_REQUEST_CODE)
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+                        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), IMAGE_LIBRARY_REQUEST_CODE)
                     }
                 }
             } else {
@@ -168,7 +170,7 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         showLoading(true)
         Utility.apiClient.sendMessage(
             RequestBody.create(mediaType, mUser.id.toString()),
-            RequestBody.create(mediaType, mRoom.id.toString()),
+            RequestBody.create(mediaType, mRoom.roomId.toString()),
             RequestBody.create(mediaType, type.toString()),
             messageData,
             fileData

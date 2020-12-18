@@ -3,6 +3,8 @@ package com.chat.activities
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -15,11 +17,16 @@ import com.chat.fragments.ChatRoomFragment
 import com.chat.models.User
 import com.chat.utils.Constants
 import com.chat.utils.Utility
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_home.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class HomeActivity : BaseActivity() {
+class HomeActivity : BaseActivity(), View.OnClickListener {
     private val mConstraintSet = ConstraintSet()
     private val mFragmentManager = supportFragmentManager
     private var isSearch = false
@@ -45,32 +52,17 @@ class HomeActivity : BaseActivity() {
             imvAvatar.setImageResource(R.drawable.ic_app)
         }
 
-        imvSearch.setOnClickListener {
-            if (isSearch) {
-                (mFragmentManager.fragments[0] as ChatRoomFragment).loadData(edtSearch.text.toString())
-            } else {
-                mConstraintSet.clone(layoutProfile)
-                mConstraintSet.connect(R.id.viewSearch, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-                mConstraintSet.connect(R.id.viewSearch, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-                mConstraintSet.clear(R.id.viewProfile, ConstraintSet.TOP)
-                mConstraintSet.connect(R.id.viewProfile, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-                TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(100))
-                mConstraintSet.applyTo(layoutProfile)
-                edtSearch.requestFocus()
-                isSearch = true
-            }
-        }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            Log.e("NEW_FCM_TOKEN", it.result ?: "")
+            val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id
+            val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+            Utility.apiClient.updateFireBaseToken(userId, deviceId, it.result ?: "").enqueue(object : Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                }
 
-        imvClose.setOnClickListener {
-            mConstraintSet.clone(layoutProfile)
-            mConstraintSet.clear(R.id.viewSearch, ConstraintSet.BOTTOM)
-            mConstraintSet.connect(R.id.viewSearch, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-            mConstraintSet.connect(R.id.viewProfile, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
-            mConstraintSet.connect(R.id.viewProfile, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
-            TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(100))
-            mConstraintSet.applyTo(layoutProfile)
-            edtSearch.setText("")
-            isSearch = false
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                }
+            })
         }
 
         edtSearch.setOnEditorActionListener { textView, i, _ ->
@@ -80,18 +72,50 @@ class HomeActivity : BaseActivity() {
             }
             return@setOnEditorActionListener false
         }
+    }
 
-        imvMenu.setOnClickListener {
-            layoutContainer.openDrawer(viewMenuRight)
-        }
-        imvCloseDrawer.setOnClickListener {
-            layoutContainer.closeDrawer(viewMenuRight)
-        }
+    override fun onClick(p0: View?) {
+        when (p0) {
+            imvSearch -> {
+                if (isSearch) {
+                    (mFragmentManager.fragments[0] as ChatRoomFragment).loadData(edtSearch.text.toString())
+                } else {
+                    mConstraintSet.clone(layoutProfile)
+                    mConstraintSet.connect(R.id.viewSearch, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                    mConstraintSet.connect(R.id.viewSearch, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+                    mConstraintSet.clear(R.id.viewProfile, ConstraintSet.TOP)
+                    mConstraintSet.connect(R.id.viewProfile, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                    TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(100))
+                    mConstraintSet.applyTo(layoutProfile)
+                    edtSearch.requestFocus()
+                    isSearch = true
+                }
+            }
 
-        viewAddChatRoom.setOnClickListener {
-            layoutContainer.closeDrawer(viewMenuRight)
-            if (mFragmentManager.fragments.last() is ChatRoomFragment) {
-                (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom()
+            imvClose -> {
+                mConstraintSet.clone(layoutProfile)
+                mConstraintSet.clear(R.id.viewSearch, ConstraintSet.BOTTOM)
+                mConstraintSet.connect(R.id.viewSearch, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+                mConstraintSet.connect(R.id.viewProfile, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                mConstraintSet.connect(R.id.viewProfile, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
+                TransitionManager.beginDelayedTransition(layoutProfile, ChangeBounds().setDuration(100))
+                mConstraintSet.applyTo(layoutProfile)
+                edtSearch.setText("")
+                isSearch = false
+            }
+
+            imvMenu -> {
+                layoutContainer.openDrawer(viewMenuRight)
+            }
+            imvCloseDrawer -> {
+                layoutContainer.closeDrawer(viewMenuRight)
+            }
+
+            viewAddChatRoom -> {
+                layoutContainer.closeDrawer(viewMenuRight)
+                if (mFragmentManager.fragments.last() is ChatRoomFragment) {
+                    (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom()
+                }
             }
         }
     }
@@ -105,16 +129,6 @@ class HomeActivity : BaseActivity() {
     }
 
     private var isExit = false
-//    override fun onBackPressed() {
-//        if (isExit) {
-//            super.onBackPressed()
-//        } else {
-//            isExit = true
-//            Toast.makeText(this, getString(R.string.txt_tap_again_to_exit), Toast.LENGTH_SHORT).show()
-//            Handler(Looper.getMainLooper()).postDelayed({ isExit = false }, 2000)
-//        }
-//    }
-
     override fun finish() {
         if (isExit) {
         super.finish()

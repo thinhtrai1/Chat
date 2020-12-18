@@ -5,6 +5,7 @@ import com.chat.models.ChatRoom
 import com.chat.models.User
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -60,4 +61,8 @@ interface ApiService {
         @Part("message") message: RequestBody?,
         @Part file: MultipartBody.Part?
     ): Call<Chat>
+
+    @FormUrlEncoded
+    @POST("updateFireBaseToken.php")
+    fun updateFireBaseToken(@Field("userId") userId: Int, @Field("deviceId") deviceId: String, @Field("token") token: String): Call<ResponseBody>
 }

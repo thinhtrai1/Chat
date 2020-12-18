@@ -1,6 +1,5 @@
 package com.chat.services
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,9 +13,16 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.chat.R
+import com.chat.models.User
 import com.chat.utils.Constants
+import com.chat.utils.Utility
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ChatMessagingService : FirebaseMessagingService() {
 
@@ -35,26 +41,24 @@ class ChatMessagingService : FirebaseMessagingService() {
          **/
         remoteMessage.data.let { data ->
             val id = data["id"]
-            val type = data["type"]
-            val body = data["body"]
-            val time = data["time"]
+            val body = data["message"]
+            val type = data["messageType"]
+            val time = data["messageTime"]
             val roomId = data["roomId"]
             val senderId = data["senderId"]
             val senderName = data["senderName"]
             val senderImage = data["senderImage"]
-            val receiverId = data["receiverId"]
 
             if (CURRENT_ROOM_ID == roomId) {
                 val intent = Intent(Constants.ACTION_NEW_MESSAGE)
                 intent.putExtra(Constants.EXTRA_MESSAGE_ID, id)
+                intent.putExtra(Constants.EXTRA_MESSAGE, body)
                 intent.putExtra(Constants.EXTRA_MESSAGE_TYPE, type)
-                intent.putExtra(Constants.EXTRA_MESSAGE_BODY, body)
                 intent.putExtra(Constants.EXTRA_MESSAGE_TIME, time)
                 intent.putExtra(Constants.EXTRA_ROOM_ID, roomId)
                 intent.putExtra(Constants.EXTRA_SENDER_ID, senderId)
                 intent.putExtra(Constants.EXTRA_SENDER_NAME, senderName)
                 intent.putExtra(Constants.EXTRA_SENDER_IMAGE, senderImage)
-                intent.putExtra(Constants.EXTRA_RECEIVER_ID, receiverId)
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
             } else {
                 showNotification(roomId, remoteMessage.notification?.title, remoteMessage.notification?.body)
@@ -62,11 +66,18 @@ class ChatMessagingService : FirebaseMessagingService() {
         }
     }
 
-    @SuppressLint("HardwareIds")
     override fun onNewToken(token: String) {
-        val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-//        mApi.updateFireBaseToken(token, deviceId)
         Log.e("NEW_FCM_TOKEN", "NEW_FCM_TOKEN: $token")
+        Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)?.id?.let {
+            val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+            Utility.apiClient.updateFireBaseToken(it, deviceId, token).enqueue(object : Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                }
+
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                }
+            })
+        }
     }
 
     private fun showNotification(roomId: String?, notificationTitle: String?, notificationMessage: String?) {

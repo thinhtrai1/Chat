@@ -25,17 +25,18 @@ object Utility {
         }
 
     fun getTimeDisplayString(milliTime: Long): String {
-        return when {
-            DateUtils.isToday(milliTime) -> {
-                "Today, " + SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(Date(milliTime))
+        return if (DateUtils.isToday(milliTime)) {
+            "Today, " + SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(Date(milliTime))
+        } else if (DateUtils.isToday(milliTime + DateUtils.DAY_IN_MILLIS)) {
+            "Yesterday, " + SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(Date(milliTime))
+        } else {
+            val timeCal = Calendar.getInstance().apply {
+                this.timeInMillis = milliTime
             }
-            DateUtils.isToday(milliTime + DateUtils.DAY_IN_MILLIS) -> {
-                "Yesterday, " + SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(Date(milliTime))
-            }
-            DateUtils.isToday(milliTime + DateUtils.WEEK_IN_MILLIS) -> {
-                SimpleDateFormat("EE hh:mm aa", Locale.getDefault()).format(Date(milliTime))
-            }
-            else -> {
+            val currCal = Calendar.getInstance()
+            if (timeCal[Calendar.YEAR] == currCal[Calendar.YEAR] && timeCal[Calendar.WEEK_OF_YEAR] == currCal[Calendar.WEEK_OF_YEAR]) {
+                SimpleDateFormat("EEEE hh:mm aa", Locale.getDefault()).format(Date(milliTime))
+            } else {
                 SimpleDateFormat("dd/MM/yyyy hh:mm aa", Locale.getDefault()).format(Date(milliTime))
             }
         }

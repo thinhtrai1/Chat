@@ -39,38 +39,38 @@ class ChatRcvAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return mList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        mList[0].let {
-//            holder.tvTime.text = Utility.getTimeDisplayString(it.time)
-//            when (it.type) {
-//                0 -> {
-//                    holder.tvMessage.text = it.message
-//                    holder.tvMessage.visibility = View.VISIBLE
-//                    holder.viewImage.visibility = View.GONE
-//                }
-//                1 -> {
-//                    Picasso.get().load(Constants.BASE_URL + it.message).into(holder.imageView)
-//                    holder.tvMessage.visibility = View.GONE
-//                    holder.viewImage.visibility = View.VISIBLE
-//                    holder.imageView.setOnClickListener { _ ->
-//                        Dialog(mContext, android.R.style.Theme_Black_NoTitleBar).apply {
-//                            val imageView = ImageView(mContext)
-//                            setContentView(imageView)
-//                            show()
-//                            Picasso.get().load(Constants.BASE_URL + it.message).into(imageView)
-//                        }
-//                    }
-//                }
-//                else -> {
-//                    holder.tvMessage.visibility = View.GONE
-//                    holder.viewImage.visibility = View.GONE
-//                }
-//            }
+        mList[position].let {
+            holder.tvTime.text = Utility.getTimeDisplayString(it.time)
+            when (it.type) {
+                0 -> {
+                    holder.tvMessage.text = it.message
+                    holder.tvMessage.visibility = View.VISIBLE
+                    holder.cardMessage.visibility = View.GONE
+                }
+                1 -> {
+                    Picasso.get().load(Constants.BASE_URL + it.message).into(holder.imvMessage)
+                    holder.tvMessage.visibility = View.GONE
+                    holder.cardMessage.visibility = View.VISIBLE
+                    holder.cardMessage.setOnClickListener { _ ->
+                        Dialog(mContext, android.R.style.Theme_Black_NoTitleBar).apply {
+                            val imageView = ImageView(mContext)
+                            setContentView(imageView)
+                            show()
+                            Picasso.get().load(Constants.BASE_URL + it.message).into(imageView)
+                        }
+                    }
+                }
+                else -> {
+                    holder.tvMessage.visibility = View.GONE
+                    holder.cardMessage.visibility = View.GONE
+                }
+            }
 
-            if (position % 2 != 0) {
+            if (it.senderId == mUserId) {
                 holder.tvMessage.isSelected = true
                 holder.tvName.visibility = View.INVISIBLE
                 holder.cardAvatar.visibility = View.INVISIBLE
@@ -80,11 +80,11 @@ class ChatRcvAdapter(
                 holder.tvMessage.isSelected = false
                 holder.tvName.visibility = View.VISIBLE
                 holder.cardAvatar.visibility = View.VISIBLE
-//                holder.tvName.text = it.name
+                holder.tvName.text = it.name
                 holder.viewSpaceLeft.visibility = View.GONE
                 holder.viewSpaceRight.visibility = View.VISIBLE
             }
-//        }
+        }
     }
 
     inner class ViewHolder(row: View) : RecyclerView.ViewHolder(row) {
@@ -93,9 +93,9 @@ class ChatRcvAdapter(
         internal val imvAvatar: ImageView = row.findViewById(R.id.imvAvatar)
         internal val tvTime: TextView = row.findViewById(R.id.tvTime)
         internal val tvMessage: TextView = row.findViewById(R.id.tvMessage)
-        internal val viewSpaceLeft: View = row.findViewById(R.id.viewSpaceLeft)
-        internal val viewSpaceRight: View = row.findViewById(R.id.viewSpaceRight)
         internal val cardMessage: CardView = row.findViewById(R.id.cardMessage)
         internal val imvMessage: ImageView = row.findViewById(R.id.imvMessage)
+        internal val viewSpaceLeft: View = row.findViewById(R.id.viewSpaceLeft)
+        internal val viewSpaceRight: View = row.findViewById(R.id.viewSpaceRight)
     }
 }

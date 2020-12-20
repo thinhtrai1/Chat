@@ -16,12 +16,11 @@ class LoadMoreView(context: Context, attr: AttributeSet?) : ProgressBar(context,
 //        } else {
 //            indeterminateDrawable = resources.getDrawable(R.drawable.progress_bar)
 //        }
-        visibility = View.GONE
     }
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         if (visibility == VISIBLE) {
-            startAnimation(AnimationUtils.loadAnimation(context, R.anim.progress_bar_slide_up))
+            startAnimation(AnimationUtils.loadAnimation(context, R.anim.load_more_view_slide_up))
         }
         super.onVisibilityChanged(changedView, visibility)
     }

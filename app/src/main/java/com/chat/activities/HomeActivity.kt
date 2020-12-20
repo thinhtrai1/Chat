@@ -1,6 +1,9 @@
 package com.chat.activities
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,6 +13,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.chat.R
@@ -33,6 +37,11 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
     private var isSearch = false
     private lateinit var mDeviceId: String
     private lateinit var mUser: User
+    private val mReceiverOpenRoomBroadcast: BroadcastReceiver = object: BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            p1?.let { checkHandleIntent(it) }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,17 +84,16 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             return@setOnEditorActionListener false
         }
 
-        intent.getStringExtra(Constants.EXTRA_ROOM_ID)?.let {
-            startActivity(Intent(this, ChatActivity::class.java)
-                .putExtra(Constants.EXTRA_ROOM_ID, it))
-        }
-
         imvSearch.setOnClickListener(this)
         imvClose.setOnClickListener(this)
         imvMenu.setOnClickListener(this)
         imvCloseDrawer.setOnClickListener(this)
         viewAddChatRoom.setOnClickListener(this)
         viewLogout.setOnClickListener(this)
+
+        checkHandleIntent(intent)
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(mReceiverOpenRoomBroadcast, IntentFilter(Constants.ACTION_OPEN_ROOM))
     }
 
     override fun onClick(p0: View?) {
@@ -152,6 +160,13 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             .commit()
     }
 
+    private fun checkHandleIntent(intent: Intent) {
+        intent.getStringExtra(Constants.EXTRA_ROOM_ID)?.let {
+            startActivity(Intent(this, ChatActivity::class.java)
+                .putExtra(Constants.EXTRA_ROOM_ID, it))
+        }
+    }
+
     private var isExit = false
     override fun finish() {
         if (isExit) {
@@ -161,5 +176,10 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             Toast.makeText(this, getString(R.string.txt_tap_again_to_exit), Toast.LENGTH_SHORT).show()
             Handler(Looper.getMainLooper()).postDelayed({ isExit = false }, 2000)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverOpenRoomBroadcast)
     }
 }

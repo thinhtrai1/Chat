@@ -2,7 +2,6 @@ package com.chat.adapters
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +9,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chat.R
-import com.chat.activities.ChatActivity
 import com.chat.activities.HomeActivity
 import com.chat.fragments.CreateRoomFragment
 import com.chat.models.ChatRoom
 import com.chat.utils.Constants
 import com.chat.utils.Utility
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 
-class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback: CreateRoomFragment.IOnCreatedChatRoom, private val mRooms: ArrayList<ChatRoom>) :
+class ChatRoomRcvAdapter(
+    private val mContext: Context,
+    private val onClickCallback: CreateRoomFragment.IOnCreatedChatRoom,
+    private val editCallback: CreateRoomFragment.IOnCreatedChatRoom,
+    private val mRooms: ArrayList<ChatRoom>) :
     RecyclerView.Adapter<ChatRoomRcvAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -55,7 +56,7 @@ class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback
                     holder.tvLastMessage.text = mContext.getString(R.string.audio)
                 }
             }
-            if (it.isHost == 1) {
+            if (it.isHost) {
                 holder.imvSetting.visibility = View.VISIBLE
                 holder.imvSetting.setOnClickListener { _ ->
                     (mContext as HomeActivity).addFragment(CreateRoomFragment(editCallback, it.id))
@@ -64,7 +65,7 @@ class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback
                 holder.imvSetting.visibility = View.GONE
             }
             holder.imageView.setOnClickListener { _ ->
-                if (it.isHost == 1) {
+                if (it.isHost) {
                     (mContext as HomeActivity).addFragment(CreateRoomFragment(editCallback, it.id))
                 } else if (!it.image.isNullOrEmpty()) {
                     Dialog(mContext, android.R.style.Theme_Black_NoTitleBar).apply {
@@ -76,7 +77,7 @@ class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback
                 }
             }
             holder.itemView.setOnClickListener { _ ->
-                mContext.startActivity(Intent(mContext, ChatActivity::class.java).putExtra(Constants.EXTRA_ROOM, Gson().toJson(it)))
+                onClickCallback.onCreated(holder.adapterPosition, it)
             }
         }
     }

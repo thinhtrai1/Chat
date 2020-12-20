@@ -18,7 +18,7 @@ class ChatMessagingBroadcast : BroadcastReceiver() {
             } else {
                 context.startActivity(
                     Intent(context, SplashActivity::class.java)
-                    .putExtra(Constants.EXTRA_ROOM_ID, roomId)
+                    .putExtra("roomId", roomId)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }
         }

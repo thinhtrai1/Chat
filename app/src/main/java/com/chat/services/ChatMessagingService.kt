@@ -41,25 +41,26 @@ class ChatMessagingService : FirebaseMessagingService() {
          **/
         remoteMessage.data.let { data ->
             val id = data["id"]
+            val roomId = data["roomId"]
             val body = data["message"]
             val type = data["messageType"]
             val time = data["messageTime"]
-            val roomId = data["roomId"]
             val senderId = data["senderId"]
             val senderName = data["senderName"]
             val senderImage = data["senderImage"]
 
-            if (CURRENT_ROOM_ID.toString() == roomId) {
-                val intent = Intent(Constants.ACTION_NEW_MESSAGE)
-                intent.putExtra(Constants.EXTRA_MESSAGE_ID, id)
-                intent.putExtra(Constants.EXTRA_MESSAGE, body)
-                intent.putExtra(Constants.EXTRA_MESSAGE_TYPE, type)
-                intent.putExtra(Constants.EXTRA_MESSAGE_TIME, time)
-                intent.putExtra(Constants.EXTRA_SENDER_ID, senderId)
-                intent.putExtra(Constants.EXTRA_SENDER_NAME, senderName)
-                intent.putExtra(Constants.EXTRA_SENDER_IMAGE, senderImage)
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-            } else {
+            val intent = Intent(Constants.ACTION_NEW_MESSAGE)
+            intent.putExtra(Constants.EXTRA_MESSAGE_ID, id)
+            intent.putExtra(Constants.EXTRA_ROOM_ID, roomId)
+            intent.putExtra(Constants.EXTRA_MESSAGE, body)
+            intent.putExtra(Constants.EXTRA_MESSAGE_TYPE, type)
+            intent.putExtra(Constants.EXTRA_MESSAGE_TIME, time)
+            intent.putExtra(Constants.EXTRA_SENDER_ID, senderId)
+            intent.putExtra(Constants.EXTRA_SENDER_NAME, senderName)
+            intent.putExtra(Constants.EXTRA_SENDER_IMAGE, senderImage)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
+            if (CURRENT_ROOM_ID.toString() != roomId) {
                 showNotification(roomId, remoteMessage.notification?.title, remoteMessage.notification?.body)
             }
         }

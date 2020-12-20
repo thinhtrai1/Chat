@@ -84,16 +84,15 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                 response.body()?.let {
                     if (mEarliestTime == 0L) {
                         mMessageList.clear()
+                        mMessageList.addAll(it)
+                        mAdapter.notifyDataSetChanged()
+                    } else {
+                        mMessageList.addAll(0, it)
+                        mAdapter.notifyItemRangeInserted(0, it.size)
                     }
-                    if (it.size > 0) {
-                        isLoadMore = it[0].isLoadMore
-                    }
-                    mMessageList.addAll(0, it)
-                    mAdapter.notifyDataSetChanged()
-                    if (mEarliestTime == 0L) {
-                        rcvChat.post {
-                            rcvChat.scrollToPosition(it.size - 1)
-                        }
+                    rcvChat.post {
+                        rcvChat.smoothScrollToPosition(it.size - 1)
+                        isLoadMore = it.size > 0 && it[0].isLoadMore
                     }
                 }
             } else {
@@ -103,23 +102,27 @@ class ChatActivity : BaseActivity(), Callback<Message> {
     }
     private val mReceiverMessageBroadcast: BroadcastReceiver = object: BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            intent?.let {
-                val message = Message().apply {
-                    id = it.getIntExtra(Constants.EXTRA_MESSAGE_ID, -1)
-                    message = it.getStringExtra(Constants.EXTRA_MESSAGE_ID)
-                    type = it.getIntExtra(Constants.EXTRA_MESSAGE_ID, 0)
-                    time = it.getLongExtra(Constants.EXTRA_MESSAGE_ID, 0)
-                    senderId = it.getIntExtra(Constants.EXTRA_MESSAGE_ID, -1)
-                    name = it.getStringExtra(Constants.EXTRA_MESSAGE_ID)
-                    avatar = it.getStringExtra(Constants.EXTRA_MESSAGE_ID)
-                }
-                mMessageList.add(message)
-                mAdapter.notifyItemInserted(mMessageList.lastIndex)
-                if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 4) {
-                    rcvChat.post {
-                        rcvChat.scrollToPosition(mMessageList.lastIndex)
+            p1?.let {
+                try {
+                    if ((it.getStringExtra(Constants.EXTRA_ROOM_ID) ?: "-1").toInt() == mRoom.roomId) {
+                        val message = Message().apply {
+                            id = (it.getStringExtra(Constants.EXTRA_MESSAGE_ID) ?: "-1").toInt()
+                            message = it.getStringExtra(Constants.EXTRA_MESSAGE)
+                            type = (it.getStringExtra(Constants.EXTRA_MESSAGE_TYPE) ?: "0").toInt()
+                            time = (it.getStringExtra(Constants.EXTRA_MESSAGE_TIME) ?: "0").toLong()
+                            senderId = (it.getStringExtra(Constants.EXTRA_SENDER_ID) ?: "-1").toInt()
+                            name = it.getStringExtra(Constants.EXTRA_SENDER_NAME)
+                            avatar = it.getStringExtra(Constants.EXTRA_SENDER_IMAGE)
+                        }
+                        mMessageList.add(message)
+                        mAdapter.notifyItemInserted(mMessageList.lastIndex)
+                        if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 4) {
+                            rcvChat.post {
+                                rcvChat.smoothScrollToPosition(mMessageList.lastIndex)
+                            }
+                        }
                     }
-                }
+                } catch (e: NumberFormatException) {}
             }
         }
     }
@@ -189,6 +192,9 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                     response.body()?.let {
                         mRoom = it
                         ChatMessagingService.CURRENT_ROOM_ID = it.roomId
+                        tvName.text = mRoom.name
+                        Picasso.get().load(Constants.BASE_URL + mRoom.image).placeholder(R.drawable.ic_app)
+                            .resize(200, 200).centerCrop().into(imvAvatar)
                         LocalBroadcastManager.getInstance(this@ChatActivity)
                             .registerReceiver(mReceiverMessageBroadcast, IntentFilter(Constants.ACTION_NEW_MESSAGE))
                     }
@@ -280,8 +286,8 @@ class ChatActivity : BaseActivity(), Callback<Message> {
 
         rcvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (isLoadMore && !recyclerView.canScrollVertically(-1)) {
-                    showLoading(true)
+                if (isLoadMore && mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                    isLoadMore = false
                     mEarliestTime = mMessageList[0].time
                     loadData()
                 }
@@ -318,12 +324,18 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                 mAdapter.notifyItemInserted(mMessageList.lastIndex)
                 if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 4) {
                     rcvChat.post {
-                        rcvChat.scrollToPosition(mMessageList.lastIndex)
+                        rcvChat.smoothScrollToPosition(mMessageList.lastIndex)
                     }
                 }
                 if (it.type == 0) {
                     edtMessage.setText("")
                 }
+
+                setResult(Activity.RESULT_OK, Intent()
+                    .putExtra(Constants.EXTRA_MESSAGE, it.message)
+                    .putExtra(Constants.EXTRA_MESSAGE_TYPE, it.type)
+                    .putExtra(Constants.EXTRA_MESSAGE_TIME, it.time)
+                )
             }
         } else {
             showAlert(response.errorBody()?.string())

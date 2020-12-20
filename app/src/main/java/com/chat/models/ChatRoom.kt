@@ -5,10 +5,9 @@ class ChatRoom {
     var roomId = -1
     val name: String? = null
     val image: String? = null
-    val lastMessage: String? = null
-    val lastMessageType = 0
-    val lastMessageTime = 0L
-    var isHost = 0
-    val hostId = 0
+    var lastMessage: String? = null
+    var lastMessageType = 0
+    var lastMessageTime = 0L
+    var isHost = false
     val member = ArrayList<User>()
 }

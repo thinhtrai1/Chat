@@ -1,6 +1,6 @@
 package com.chat.utils
 
-import com.chat.models.Chat
+import com.chat.models.Message
 import com.chat.models.ChatRoom
 import com.chat.models.User
 import okhttp3.MultipartBody
@@ -32,6 +32,9 @@ interface ApiService {
     @GET("getChatRoom.php")
     fun getChatRoom(@Query("userId") userId: Int, @Query("search") search: String, @Query("page") page: Int): Call<ArrayList<ChatRoom>>
 
+    @GET("getDetailRoom.php")
+    fun getDetailRoom(@Query("userId") userId: Int, @Query("roomId") roomId: Int): Call<ChatRoom>
+
     @GET("getUser.php")
     fun getUser(@Query("userId") userId: Int, @Query("search") search: String): Call<ArrayList<User>>
 
@@ -50,7 +53,7 @@ interface ApiService {
         @Query("roomId") roomId: Int,
         @Query("search") search: String,
         @Query("latestTime") latestTime: Long
-    ): Call<ArrayList<Chat>>
+    ): Call<ArrayList<Message>>
 
     @Multipart
     @POST("sendMessage.php")
@@ -60,9 +63,13 @@ interface ApiService {
         @Part("type") type: RequestBody,
         @Part("message") message: RequestBody?,
         @Part file: MultipartBody.Part?
-    ): Call<Chat>
+    ): Call<Message>
 
     @FormUrlEncoded
     @POST("updateFireBaseToken.php")
     fun updateFireBaseToken(@Field("userId") userId: Int, @Field("deviceId") deviceId: String, @Field("token") token: String): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("logout.php")
+    fun logout(@Field("userId") userId: Int, @Field("deviceId") deviceId: String): Call<ResponseBody>
 }

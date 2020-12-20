@@ -1,5 +1,6 @@
 package com.chat.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -30,6 +31,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
     private val mConstraintSet = ConstraintSet()
     private val mFragmentManager = supportFragmentManager
     private var isSearch = false
+    private lateinit var mDeviceId: String
     private lateinit var mUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_home)
 
         mFragmentManager.beginTransaction().replace(R.id.frameHome, ChatRoomFragment()).commit()
+        mDeviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
         mUser = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)
         tvName.text = mUser.name
@@ -55,8 +58,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             Log.e("NEW_FCM_TOKEN", it.result ?: "")
             val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id
-            val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-            Utility.apiClient.updateFireBaseToken(userId, deviceId, it.result ?: "").enqueue(object : Callback<ResponseBody> {
+            Utility.apiClient.updateFireBaseToken(userId, mDeviceId, it.result ?: "").enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 }
 
@@ -72,6 +74,18 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             }
             return@setOnEditorActionListener false
         }
+
+        intent.getStringExtra(Constants.EXTRA_ROOM_ID)?.let {
+            startActivity(Intent(this, ChatActivity::class.java)
+                .putExtra(Constants.EXTRA_ROOM_ID, it))
+        }
+
+        imvSearch.setOnClickListener(this)
+        imvClose.setOnClickListener(this)
+        imvMenu.setOnClickListener(this)
+        imvCloseDrawer.setOnClickListener(this)
+        viewAddChatRoom.setOnClickListener(this)
+        viewLogout.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -116,6 +130,16 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
                 if (mFragmentManager.fragments.last() is ChatRoomFragment) {
                     (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom()
                 }
+            }
+
+            viewLogout -> {
+                Utility.sharedPreferences.edit().clear().apply()
+                Utility.apiClient.logout(mUser.id, mDeviceId).enqueue(object : Callback<ResponseBody> {
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {}
+                })
+                startActivity(Intent(this@HomeActivity, LoginActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
             }
         }
     }

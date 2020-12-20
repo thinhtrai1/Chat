@@ -28,7 +28,7 @@ class ChatMessagingService : FirebaseMessagingService() {
 
     companion object {
         private var NOTIFICATION_ID = 0
-        var CURRENT_ROOM_ID = ""
+        var CURRENT_ROOM_ID = -1
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -49,13 +49,12 @@ class ChatMessagingService : FirebaseMessagingService() {
             val senderName = data["senderName"]
             val senderImage = data["senderImage"]
 
-            if (CURRENT_ROOM_ID == roomId) {
+            if (CURRENT_ROOM_ID.toString() == roomId) {
                 val intent = Intent(Constants.ACTION_NEW_MESSAGE)
                 intent.putExtra(Constants.EXTRA_MESSAGE_ID, id)
                 intent.putExtra(Constants.EXTRA_MESSAGE, body)
                 intent.putExtra(Constants.EXTRA_MESSAGE_TYPE, type)
                 intent.putExtra(Constants.EXTRA_MESSAGE_TIME, time)
-                intent.putExtra(Constants.EXTRA_ROOM_ID, roomId)
                 intent.putExtra(Constants.EXTRA_SENDER_ID, senderId)
                 intent.putExtra(Constants.EXTRA_SENDER_NAME, senderName)
                 intent.putExtra(Constants.EXTRA_SENDER_IMAGE, senderImage)
@@ -86,11 +85,11 @@ class ChatMessagingService : FirebaseMessagingService() {
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notificationBuilder = NotificationCompat.Builder(this, getString(R.string.notification_channel_id))
-            .setSmallIcon(R.drawable.ic_app)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(notificationTitle ?: getString(R.string.app_name))
             .setContentText(notificationMessage)
 //            .setStyle(NotificationCompat.BigTextStyle().bigText(notificationMessage))
-            .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .setColor(ContextCompat.getColor(this, R.color.black))
             .setAutoCancel(true)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))

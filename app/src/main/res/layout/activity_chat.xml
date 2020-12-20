@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_10"
             android:layout_weight="1">
 
             <LinearLayout
@@ -42,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:gravity="center"
+                android:layout_marginEnd="@dimen/margin_10"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -103,12 +104,24 @@
         android:layout_height="2dp"
         android:background="@color/white" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvChat"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:listitem="@layout/item_rcv_chat" />
+        android:layout_weight="1">
+
+        <com.chat.views.LoadMoreView
+            android:id="@+id/loadMoreView"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/size_50"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvChat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_rcv_chat" />
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"

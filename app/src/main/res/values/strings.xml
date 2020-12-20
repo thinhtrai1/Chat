@@ -3,6 +3,8 @@
     <string name="please_check_the_network_connection">Please check the network connection.</string>
     <string name="an_error_occurred_message">An error occurred: %1$s</string>
     <string name="an_error_occurred">An error occurred. Please try again.</string>
+    <string name="data_error">Data error!</string>
+    <string name="image_error">Load image error!</string>
 
     <string name="login">Login</string>
     <string name="email">Email</string>
@@ -22,6 +24,7 @@
     <string name="search_message">Search message…</string>
     <string name="search_for_name_or_email">Search for name or email…</string>
     <string name="add_chat_room">New chat room</string>
+    <string name="logout">Logout</string>
     <string name="room_name">Room name</string>
     <string name="members">Members</string>
     <string name="create">Create</string>

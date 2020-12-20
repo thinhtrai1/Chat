@@ -23,4 +23,6 @@
     <dimen name="home_option_radius">15dp</dimen>
     <dimen name="home_room_size">50dp</dimen>
     <dimen name="home_room_radius">25dp</dimen>
+
+    <dimen name="message_image_height">150dp</dimen>
 </resources>

@@ -2,7 +2,10 @@ package com.chat.activities
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -10,16 +13,21 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.chat.R
 import com.chat.adapters.ChatRcvAdapter
-import com.chat.models.Chat
+import com.chat.models.Message
 import com.chat.models.ChatRoom
 import com.chat.models.User
+import com.chat.services.ChatMessagingService
 import com.chat.utils.Constants
 import com.chat.utils.Utility
 import com.google.gson.Gson
@@ -32,8 +40,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.lang.NumberFormatException
 
-class ChatActivity : BaseActivity(), Callback<Chat> {
+class ChatActivity : BaseActivity(), Callback<Message> {
     companion object {
         private const val IMAGE_LIBRARY_REQUEST_CODE = 1001
         private const val IMAGE_CAMERA_REQUEST_CODE = 1002
@@ -43,58 +52,162 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         private const val AUDIO_CAMERA_REQUEST_CODE = 1006
     }
 
+    private lateinit var mAdapter: ChatRcvAdapter
+    private lateinit var mLayoutManager: LinearLayoutManager
     private val mUser: User = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)
     private var isSearch = false
     private val mConstraintSet = ConstraintSet()
-    private val mChatList = ArrayList<Chat>()
-    private lateinit var mAdapter: ChatRcvAdapter
-    private lateinit var mRoom: ChatRoom
-    private val mGetMessageCallback: Callback<ArrayList<Chat>> = object : Callback<ArrayList<Chat>> {
-        override fun onFailure(call: Call<ArrayList<Chat>>, t: Throwable) {
-            showLoading(false)
+    private val mMessageList = ArrayList<Message>()
+    private var mEarliestTime = 0L
+    private var isLoadMore = false
+    private var mRoom = ChatRoom()
+    private var mTwoCallbackLoaded = false
+    private val mGetMessageCallback: Callback<ArrayList<Message>> = object : Callback<ArrayList<Message>> {
+        override fun onFailure(call: Call<ArrayList<Message>>, t: Throwable) {
+            loadMoreView.visibility = View.GONE
+            if (mTwoCallbackLoaded || mRoom.name != null) {
+                showLoading(false)
+            } else {
+                mTwoCallbackLoaded = true
+            }
             showAlert(t)
         }
 
-        override fun onResponse(call: Call<ArrayList<Chat>>, response: Response<ArrayList<Chat>>) {
-            showLoading(false)
+        override fun onResponse(call: Call<ArrayList<Message>>, response: Response<ArrayList<Message>>) {
+            loadMoreView.visibility = View.GONE
+            if (mTwoCallbackLoaded || mRoom.name != null) {
+                showLoading(false)
+            } else {
+                mTwoCallbackLoaded = true
+            }
             if (response.isSuccessful) {
                 response.body()?.let {
-                    mChatList.addAll(0, it)
+                    if (mEarliestTime == 0L) {
+                        mMessageList.clear()
+                    }
+                    if (it.size > 0) {
+                        isLoadMore = it[0].isLoadMore
+                    }
+                    mMessageList.addAll(0, it)
                     mAdapter.notifyDataSetChanged()
+                    if (mEarliestTime == 0L) {
+                        rcvChat.post {
+                            rcvChat.scrollToPosition(it.size - 1)
+                        }
+                    }
                 }
             } else {
                 showAlert(response.errorBody()?.string())
             }
         }
     }
+    private val mReceiverMessageBroadcast: BroadcastReceiver = object: BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            intent?.let {
+                val message = Message().apply {
+                    id = it.getIntExtra(Constants.EXTRA_MESSAGE_ID, -1)
+                    message = it.getStringExtra(Constants.EXTRA_MESSAGE_ID)
+                    type = it.getIntExtra(Constants.EXTRA_MESSAGE_ID, 0)
+                    time = it.getLongExtra(Constants.EXTRA_MESSAGE_ID, 0)
+                    senderId = it.getIntExtra(Constants.EXTRA_MESSAGE_ID, -1)
+                    name = it.getStringExtra(Constants.EXTRA_MESSAGE_ID)
+                    avatar = it.getStringExtra(Constants.EXTRA_MESSAGE_ID)
+                }
+                mMessageList.add(message)
+                mAdapter.notifyItemInserted(mMessageList.lastIndex)
+                if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 4) {
+                    rcvChat.post {
+                        rcvChat.scrollToPosition(mMessageList.lastIndex)
+                    }
+                }
+            }
+        }
+    }
 
     private fun loadData() {
-        showLoading(true)
+        if (mEarliestTime == 0L) {
+            showLoading(true)
+        } else {
+            loadMoreView.visibility = View.VISIBLE
+        }
         Utility.apiClient.getMessage(
             mUser.id,
             mRoom.roomId,
             edtSearch.text.toString(),
-            if (mChatList.isNotEmpty()) mChatList[0].time else 0
+            mEarliestTime
         ).enqueue(mGetMessageCallback)
+    }
+
+    override fun onDestroy() {
+        ChatMessagingService.CURRENT_ROOM_ID = -1
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverMessageBroadcast)
+        super.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        mRoom = Gson().fromJson(intent.getStringExtra("room"), ChatRoom::class.java)
-        tvName.text = mRoom.name
-        Picasso.get().load(Constants.BASE_URL + mRoom.image).placeholder(R.drawable.ic_app)
-            .resize(200, 200).centerCrop().into(imvAvatar)
+        if (intent.getStringExtra(Constants.EXTRA_ROOM_ID) == null && intent.getStringExtra(Constants.EXTRA_ROOM) == null) {
+            showToast(getString(R.string.data_error))
+            finish()
+            return
+        }
 
-        mAdapter = ChatRcvAdapter(this, mChatList, mUser.id)
-        rcvChat.adapter = mAdapter
-        rcvChat.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        if (intent.getStringExtra(Constants.EXTRA_ROOM_ID) != null) {
+            try {
+                mRoom.roomId = intent.getStringExtra(Constants.EXTRA_ROOM_ID)!!.toInt()
+            } catch (e: NumberFormatException) {
+                showToast(getString(R.string.data_error))
+                finish()
+                return
+            }
+        } else if (intent.getStringExtra(Constants.EXTRA_ROOM) != null) {
+            mRoom = Gson().fromJson(intent.getStringExtra(Constants.EXTRA_ROOM), ChatRoom::class.java)
+            tvName.text = mRoom.name
+            Picasso.get().load(Constants.BASE_URL + mRoom.image).placeholder(R.drawable.ic_app)
+                .resize(200, 200).centerCrop().into(imvAvatar)
+        }
+
+        Utility.apiClient.getDetailRoom(mUser.id, mRoom.roomId).enqueue(object : Callback<ChatRoom> {
+            override fun onFailure(call: Call<ChatRoom>, t: Throwable) {
+                if (mTwoCallbackLoaded) {
+                    showLoading(false)
+                } else {
+                    mTwoCallbackLoaded = true
+                }
+                showAlert(t)
+            }
+
+            override fun onResponse(call: Call<ChatRoom>, response: Response<ChatRoom>) {
+                if (mTwoCallbackLoaded) {
+                    showLoading(false)
+                } else {
+                    mTwoCallbackLoaded = true
+                }
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        mRoom = it
+                        ChatMessagingService.CURRENT_ROOM_ID = it.roomId
+                        LocalBroadcastManager.getInstance(this@ChatActivity)
+                            .registerReceiver(mReceiverMessageBroadcast, IntentFilter(Constants.ACTION_NEW_MESSAGE))
+                    }
+                } else {
+                    showAlert(response.errorBody()?.string())
+                }
+            }
+        })
 
         loadData()
 
+        mAdapter = ChatRcvAdapter(this, mMessageList, mUser.id)
+        mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rcvChat.adapter = mAdapter
+        rcvChat.layoutManager = mLayoutManager
+
         imvSearch.setOnClickListener {
             if (isSearch) {
+                mEarliestTime = 0
                 loadData()
             } else {
                 mConstraintSet.clone(layoutProfile)
@@ -119,7 +232,17 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
             mConstraintSet.applyTo(layoutProfile)
             edtSearch.setText("")
             isSearch = false
+            mEarliestTime = 0
             loadData()
+        }
+
+        edtSearch.setOnEditorActionListener { _, i, _ ->
+            if (i == EditorInfo.IME_ACTION_SEARCH) {
+                mEarliestTime = 0
+                loadData()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
 
         edtMessage.addTextChangedListener(object : TextWatcher {
@@ -154,6 +277,16 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
                 sendMessage(0, edtMessage.text.toString().trim(), null)
             }
         }
+
+        rcvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (isLoadMore && !recyclerView.canScrollVertically(-1)) {
+                    showLoading(true)
+                    mEarliestTime = mMessageList[0].time
+                    loadData()
+                }
+            }
+        })
     }
 
     private fun sendMessage(type: Int, message: String?, file: File?) {
@@ -177,13 +310,17 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         ).enqueue(this)
     }
 
-    override fun onResponse(call: Call<Chat>, response: Response<Chat>) {
+    override fun onResponse(call: Call<Message>, response: Response<Message>) {
         showLoading(false)
         if (response.isSuccessful) {
             response.body()?.let {
-                mChatList.add(it)
-                mAdapter.notifyItemInserted(mChatList.lastIndex)
-                rcvChat.scrollToPosition(mChatList.lastIndex)
+                mMessageList.add(it)
+                mAdapter.notifyItemInserted(mMessageList.lastIndex)
+                if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 4) {
+                    rcvChat.post {
+                        rcvChat.scrollToPosition(mMessageList.lastIndex)
+                    }
+                }
                 if (it.type == 0) {
                     edtMessage.setText("")
                 }
@@ -193,7 +330,7 @@ class ChatActivity : BaseActivity(), Callback<Chat> {
         }
     }
 
-    override fun onFailure(call: Call<Chat>, t: Throwable) {
+    override fun onFailure(call: Call<Message>, t: Throwable) {
         showLoading(false)
         showAlert(t)
     }

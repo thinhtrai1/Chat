@@ -126,6 +126,7 @@ class LoginActivity : BaseActivity(), Callback<User> {
                     .apply()
                 startActivity(
                     Intent(this@LoginActivity, HomeActivity::class.java)
+                        .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra(Constants.EXTRA_ROOM_ID))
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
             }

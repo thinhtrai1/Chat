@@ -76,7 +76,7 @@ class ChatRoomRcvAdapter(private val mContext: Context, private val editCallback
                 }
             }
             holder.itemView.setOnClickListener { _ ->
-                mContext.startActivity(Intent(mContext, ChatActivity::class.java).putExtra("room", Gson().toJson(it)))
+                mContext.startActivity(Intent(mContext, ChatActivity::class.java).putExtra(Constants.EXTRA_ROOM, Gson().toJson(it)))
             }
         }
     }

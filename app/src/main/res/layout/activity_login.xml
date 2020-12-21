@@ -37,8 +37,9 @@
         android:hint="@string/your_name"
         android:inputType="textCapWords"
         android:padding="@dimen/margin_10"
+        android:textStyle="bold"
         android:textColor="@color/white"
-        android:textColorHint="#A3A3A3"
+        android:textColorHint="@color/color_2"
         android:textSize="@dimen/text_14"
         android:visibility="gone" />
 
@@ -52,8 +53,9 @@
         android:inputType="textEmailAddress"
         android:padding="@dimen/margin_10"
         android:textColor="@color/white"
-        android:textColorHint="#A3A3A3"
-        android:textSize="@dimen/text_14" />
+        android:textColorHint="@color/color_2"
+        android:textSize="@dimen/text_14"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edtPhone"
@@ -64,7 +66,10 @@
         android:hint="@string/phone"
         android:inputType="phone"
         android:padding="@dimen/margin_10"
+        android:textColor="@color/white"
+        android:textColorHint="@color/color_2"
         android:textSize="@dimen/text_14"
+        android:textStyle="bold"
         android:visibility="gone" />
 
     <EditText
@@ -77,8 +82,9 @@
         android:inputType="textPassword"
         android:padding="@dimen/margin_10"
         android:textColor="@color/white"
-        android:textColorHint="#A3A3A3"
-        android:textSize="@dimen/text_14" />
+        android:textColorHint="@color/color_2"
+        android:textSize="@dimen/text_14"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edtConfirmPassword"
@@ -90,8 +96,9 @@
         android:inputType="textPassword"
         android:padding="@dimen/margin_10"
         android:textColor="@color/white"
-        android:textColorHint="#A3A3A3"
+        android:textColorHint="@color/color_2"
         android:textSize="@dimen/text_14"
+        android:textStyle="bold"
         android:visibility="gone" />
 
     <Button

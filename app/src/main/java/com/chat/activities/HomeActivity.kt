@@ -89,6 +89,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
         imvMenu.setOnClickListener(this)
         imvCloseDrawer.setOnClickListener(this)
         viewAddChatRoom.setOnClickListener(this)
+        viewUpdateProfile.setOnClickListener(this)
         viewLogout.setOnClickListener(this)
 
         checkHandleIntent(intent)
@@ -138,6 +139,12 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
                 if (mFragmentManager.fragments.last() is ChatRoomFragment) {
                     (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom()
                 }
+            }
+
+            viewUpdateProfile -> {
+                startActivity(Intent(this@HomeActivity, LoginActivity::class.java)
+                    .putExtra("isUpdate", true)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
             }
 
             viewLogout -> {

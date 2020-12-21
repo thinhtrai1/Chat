@@ -24,6 +24,7 @@
     <string name="search_message">Search message…</string>
     <string name="search_for_name_or_email">Search for name or email…</string>
     <string name="add_chat_room">New chat room</string>
+    <string name="update_profile">Update Profile</string>
     <string name="logout">Logout</string>
     <string name="room_name">Room name</string>
     <string name="members">Members</string>

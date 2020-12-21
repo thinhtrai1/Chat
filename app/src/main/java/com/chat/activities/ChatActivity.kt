@@ -61,24 +61,24 @@ class ChatActivity : BaseActivity(), Callback<Message> {
     private var mEarliestTime = 0L
     private var isLoadMore = false
     private var mRoom = ChatRoom()
-    private var mTwoCallbackLoaded = false
+    private var isTwoCallbackLoaded = false
     private val mGetMessageCallback: Callback<ArrayList<Message>> = object : Callback<ArrayList<Message>> {
         override fun onFailure(call: Call<ArrayList<Message>>, t: Throwable) {
             loadMoreView.visibility = View.GONE
-            if (mTwoCallbackLoaded || mRoom.name != null) {
+            if (isTwoCallbackLoaded || mRoom.name != null) {
                 showLoading(false)
             } else {
-                mTwoCallbackLoaded = true
+                isTwoCallbackLoaded = true
             }
             showAlert(t)
         }
 
         override fun onResponse(call: Call<ArrayList<Message>>, response: Response<ArrayList<Message>>) {
             loadMoreView.visibility = View.GONE
-            if (mTwoCallbackLoaded || mRoom.name != null) {
+            if (isTwoCallbackLoaded || mRoom.name != null) {
                 showLoading(false)
             } else {
-                mTwoCallbackLoaded = true
+                isTwoCallbackLoaded = true
             }
             if (response.isSuccessful) {
                 response.body()?.let {
@@ -90,9 +90,11 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                         mMessageList.addAll(0, it)
                         mAdapter.notifyItemRangeInserted(0, it.size)
                     }
-                    rcvChat.post {
-                        rcvChat.smoothScrollToPosition(it.size - 1)
-                        isLoadMore = it.size > 0 && it[0].isLoadMore
+                    if (it.size > 0) {
+                        rcvChat.post {
+                            rcvChat.smoothScrollToPosition(it.size - 1)
+                            isLoadMore = it[0].isLoadMore
+                        }
                     }
                 }
             } else {
@@ -133,6 +135,7 @@ class ChatActivity : BaseActivity(), Callback<Message> {
         } else {
             loadMoreView.visibility = View.VISIBLE
         }
+        isLoadMore = false
         Utility.apiClient.getMessage(
             mUser.id,
             mRoom.roomId,
@@ -174,19 +177,19 @@ class ChatActivity : BaseActivity(), Callback<Message> {
 
         Utility.apiClient.getDetailRoom(mUser.id, mRoom.roomId).enqueue(object : Callback<ChatRoom> {
             override fun onFailure(call: Call<ChatRoom>, t: Throwable) {
-                if (mTwoCallbackLoaded) {
+                if (isTwoCallbackLoaded) {
                     showLoading(false)
                 } else {
-                    mTwoCallbackLoaded = true
+                    isTwoCallbackLoaded = true
                 }
                 showAlert(t)
             }
 
             override fun onResponse(call: Call<ChatRoom>, response: Response<ChatRoom>) {
-                if (mTwoCallbackLoaded) {
+                if (isTwoCallbackLoaded) {
                     showLoading(false)
                 } else {
-                    mTwoCallbackLoaded = true
+                    isTwoCallbackLoaded = true
                 }
                 if (response.isSuccessful) {
                     response.body()?.let {
@@ -287,7 +290,6 @@ class ChatActivity : BaseActivity(), Callback<Message> {
         rcvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (isLoadMore && mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-                    isLoadMore = false
                     mEarliestTime = mMessageList[0].time
                     loadData()
                 }

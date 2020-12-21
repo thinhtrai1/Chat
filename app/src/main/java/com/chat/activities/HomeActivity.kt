@@ -14,8 +14,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.transition.ChangeBounds
-import androidx.transition.TransitionManager
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import com.chat.R
 import com.chat.fragments.BaseFragment
 import com.chat.fragments.ChatRoomFragment

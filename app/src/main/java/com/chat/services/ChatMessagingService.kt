@@ -27,7 +27,6 @@ import retrofit2.Response
 class ChatMessagingService : FirebaseMessagingService() {
 
     companion object {
-        private var NOTIFICATION_ID = 0
         var CURRENT_ROOM_ID = -1
     }
 
@@ -40,7 +39,7 @@ class ChatMessagingService : FirebaseMessagingService() {
          * 3: audio
          **/
         remoteMessage.data.let { data ->
-            val id = data["id"]
+            val id = (data["id"]?.toIntOrNull() ?: (0..10).random()).toString()
             val roomId = data["roomId"]
             val body = data["message"]
             val type = data["messageType"]
@@ -61,7 +60,7 @@ class ChatMessagingService : FirebaseMessagingService() {
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
             if (CURRENT_ROOM_ID.toString() != roomId) {
-                showNotification(roomId, remoteMessage.notification?.title, remoteMessage.notification?.body)
+                showNotification(roomId, id.toInt(), data["notification_title"], data["notification_body"])
             }
         }
     }
@@ -80,7 +79,7 @@ class ChatMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun showNotification(roomId: String?, notificationTitle: String?, notificationMessage: String?) {
+    private fun showNotification(roomId: String?, notificationId: Int, notificationTitle: String?, notificationMessage: String?) {
         val intent = Intent(this, ChatMessagingBroadcast::class.java)
             .putExtra(Constants.EXTRA_ROOM_ID, roomId)
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -101,7 +100,7 @@ class ChatMessagingService : FirebaseMessagingService() {
                 val channel = NotificationChannel(getString(R.string.notification_channel_id), getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
                 createNotificationChannel(channel)
             }
-            notify(NOTIFICATION_ID++, notificationBuilder.build())
+            notify(notificationId, notificationBuilder.build())
         }
     }
 }

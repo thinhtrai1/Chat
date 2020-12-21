@@ -128,6 +128,11 @@ class ChatActivity : BaseActivity(), Callback<Message> {
             }
         }
     }
+    private val mReceiverOpenRoomBroadcast: BroadcastReceiver = object: BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            p1?.let { finish() }
+        }
+    }
 
     private fun loadData() {
         if (mEarliestTime == 0L) {
@@ -144,9 +149,15 @@ class ChatActivity : BaseActivity(), Callback<Message> {
         ).enqueue(mGetMessageCallback)
     }
 
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiverOpenRoomBroadcast, IntentFilter(Constants.ACTION_OPEN_ROOM))
+    }
+
     override fun onDestroy() {
         ChatMessagingService.CURRENT_ROOM_ID = -1
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverMessageBroadcast)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverOpenRoomBroadcast)
         super.onDestroy()
     }
 

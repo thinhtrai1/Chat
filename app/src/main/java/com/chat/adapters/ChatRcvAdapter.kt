@@ -39,7 +39,11 @@ class ChatRcvAdapter(
                     holder.cardMessage.visibility = View.GONE
                 }
                 1 -> {
-                    Picasso.get().load(Constants.BASE_URL + it.message).into(holder.imvMessage)
+                    Picasso.get()
+                        .load(Constants.BASE_URL + it.message)
+                        .resizeDimen(R.dimen.message_image_height, R.dimen.message_image_height)
+                        .centerInside()
+                        .into(holder.imvMessage)
                     holder.tvMessage.visibility = View.GONE
                     holder.cardMessage.visibility = View.VISIBLE
                     holder.cardMessage.setOnClickListener { _ ->

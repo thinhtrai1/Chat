@@ -13,4 +13,16 @@
     <dimen name="margin_10">12dp</dimen>
     <dimen name="margin_15">18dp</dimen>
     <dimen name="margin_20">24dp</dimen>
+
+    <dimen name="size_50">60dp</dimen>
+    <dimen name="size_100">120dp</dimen>
+
+    <dimen name="home_avatar_size">72dp</dimen>
+    <dimen name="home_avatar_radius">36dp</dimen>
+    <dimen name="home_option_size">36dp</dimen>
+    <dimen name="home_option_radius">18dp</dimen>
+    <dimen name="home_room_size">60dp</dimen>
+    <dimen name="home_room_radius">30dp</dimen>
+
+    <dimen name="message_image_height">170dp</dimen>
 </resources>

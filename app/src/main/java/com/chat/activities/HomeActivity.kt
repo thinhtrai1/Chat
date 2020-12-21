@@ -90,6 +90,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
         imvCloseDrawer.setOnClickListener(this)
         viewAddChatRoom.setOnClickListener(this)
         viewUpdateProfile.setOnClickListener(this)
+        viewMode.setOnClickListener(this)
         viewLogout.setOnClickListener(this)
 
         checkHandleIntent(intent)
@@ -142,10 +143,10 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             }
 
             viewUpdateProfile -> {
-                startActivity(Intent(this@HomeActivity, LoginActivity::class.java)
-                    .putExtra("isUpdate", true)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                startActivity(Intent(this@HomeActivity, LoginActivity::class.java).putExtra("isUpdate", true))
             }
+
+            viewMode -> {}
 
             viewLogout -> {
                 Utility.sharedPreferences.edit().clear().apply()

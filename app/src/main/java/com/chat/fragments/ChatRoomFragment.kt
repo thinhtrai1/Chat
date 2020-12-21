@@ -132,13 +132,18 @@ class ChatRoomFragment : BaseFragment(), Callback<ArrayList<ChatRoom>>, CreateRo
         super.onDestroy()
     }
 
+    override fun startActivityForResult(intent: Intent?, requestCode: Int) {
+        super.startActivityForResult(intent, requestCode)
+        activity?.overridePendingTransition(R.anim.anim_scale_open, R.anim.anim_scale_exit)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == 1997) {
                 mChatRooms[mCurrentPositionChat].lastMessage = data.getStringExtra(Constants.EXTRA_MESSAGE)
-                mChatRooms[mCurrentPositionChat].lastMessageType = (data.getStringExtra(Constants.EXTRA_MESSAGE_TYPE) ?: "0").toInt()
-                mChatRooms[mCurrentPositionChat].lastMessageTime = (data.getStringExtra(Constants.EXTRA_MESSAGE_TIME) ?: "0").toLong()
+                mChatRooms[mCurrentPositionChat].lastMessageType = data.getIntExtra(Constants.EXTRA_MESSAGE_TYPE, 0)
+                mChatRooms[mCurrentPositionChat].lastMessageTime = data.getLongExtra(Constants.EXTRA_MESSAGE_TIME, 0L)
                 mAdapter.notifyItemChanged(mCurrentPositionChat)
                 if (mCurrentPositionChat != 0) {
                     Collections.swap(mChatRooms, 0, mCurrentPositionChat)

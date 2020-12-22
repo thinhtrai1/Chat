@@ -4,8 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.*
 import android.media.RingtoneManager
 import android.os.Build
 import android.provider.Settings
@@ -33,7 +32,6 @@ class ChatMessagingService : FirebaseMessagingService() {
 
     companion object {
         var CURRENT_ROOM_ID = -1
-        const val KEY_TEXT_REPLY = "KEY_TEXT_REPLY"
     }
 
     override fun onNewToken(token: String) {
@@ -80,19 +78,19 @@ class ChatMessagingService : FirebaseMessagingService() {
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
             if (CURRENT_ROOM_ID.toString() != roomId) {
-                showNotification(roomId, body, type, id.toInt(), data["notification_title"], data["notification_body"])
+                showNotification(roomId, senderImage, body, type, id.toInt(), data["notification_title"], data["notification_body"])
             }
         }
     }
 
-    private fun showNotification(roomId: String?, message: String?, messageType: String?, notificationId: Int, notificationTitle: String?, notificationMessage: String?) {
+    private fun showNotification(roomId: String?, senderImage: String?, message: String?, messageType: String?, notificationId: Int, notificationTitle: String?, notificationMessage: String?) {
         val intent = Intent(this, ChatMessagingBroadcast::class.java)
             .putExtra(Constants.EXTRA_ROOM_ID, roomId)
             .putExtra("notificationId", notificationId)
         val pendingIntent = PendingIntent.getBroadcast(this, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val replyAction: NotificationCompat.Action = NotificationCompat.Action.Builder(R.drawable.ic_send_message, getString(R.string.reply), pendingIntent)
-            .addRemoteInput(RemoteInput.Builder(KEY_TEXT_REPLY).setLabel(getString(R.string.i_love_u)).build())
+            .addRemoteInput(RemoteInput.Builder("KEY_TEXT_REPLY").setLabel(getString(R.string.i_love_u)).build())
             .setAllowGeneratedReplies(true)
             .build()
 
@@ -104,13 +102,13 @@ class ChatMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+            .setLargeIcon(senderImage?.getBitmap(true))
             .setContentIntent(pendingIntent)
             .addAction(replyAction)
 
         if (message != null && messageType == "1") {
-            val messageImage = message.getBitmap()
-            notificationBuilder.setLargeIcon(messageImage)
-                .setStyle(NotificationCompat.BigPictureStyle().bigPicture(messageImage).bigLargeIcon(null))
+            notificationBuilder.setStyle(
+                NotificationCompat.BigPictureStyle().bigPicture(message.getBitmap(false)).bigLargeIcon(null))
         }
 
         with(NotificationManagerCompat.from(this)) {
@@ -122,17 +120,59 @@ class ChatMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun String.getBitmap(): Bitmap? {
-        return try {
+    private fun String.getBitmap(isAvatar: Boolean): Bitmap? {
+        try {
             val url = URL(Constants.BASE_URL + this)
             val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
             connection.doInput = true
             connection.connect()
             val input = connection.inputStream
-            BitmapFactory.decodeStream(input)
+            val bitmap = BitmapFactory.decodeStream(input)
+            return if (isAvatar) {
+                bitmap.circle()
+            } else {
+                bitmap
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            null
         }
+        return null
+    }
+
+    private fun Bitmap.circle(): Bitmap {
+        val mWidth = width //radius
+        val output = Bitmap.createBitmap(mWidth, mWidth, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val color = "#BAB399"
+        val paint = Paint()
+        val rect = Rect(0, 0, mWidth, mWidth)
+        paint.isAntiAlias = true
+        paint.isFilterBitmap = true
+        paint.isDither = true
+        canvas.drawARGB(0, 0, 0, 0)
+        paint.color = Color.parseColor(color)
+        canvas.drawCircle(mWidth / 2 + 0.7f, mWidth / 2 + 0.7f, mWidth / 2 + 0.1f, paint)
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+
+        val newBitmap: Bitmap
+        val rectSrc: Rect
+        if (mWidth != height) {
+            val factor = mWidth.coerceAtMost(height).toFloat() / mWidth
+            val newWidth = (mWidth / factor).toInt()
+            val newHeight = (height / factor).toInt()
+            newBitmap = Bitmap.createScaledBitmap(this, newWidth, newHeight, false)
+            val rad = mWidth / 2
+            rectSrc = Rect(
+                newWidth / 2 - rad,
+                newHeight / 2 - rad,
+                newWidth / 2 + rad,
+                newHeight / 2 + rad)
+        } else {
+            newBitmap = this
+            rectSrc = rect
+        }
+
+        canvas.drawBitmap(newBitmap, rectSrc, rect, paint)
+        return output
     }
 }

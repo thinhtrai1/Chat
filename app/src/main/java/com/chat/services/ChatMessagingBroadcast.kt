@@ -14,7 +14,6 @@ import com.chat.R
 import com.chat.activities.SplashActivity
 import com.chat.models.Message
 import com.chat.models.User
-import com.chat.services.ChatMessagingService.Companion.KEY_TEXT_REPLY
 import com.chat.utils.Constants
 import com.chat.utils.Utility
 import com.google.gson.Gson
@@ -45,10 +44,11 @@ class ChatMessagingBroadcast : BroadcastReceiver() {
 
     private fun handleReplyIntent(context: Context, intent: Intent, roomId: String): Boolean {
         val remoteInput = RemoteInput.getResultsFromIntent(intent) ?: return false
-        NotificationManagerCompat.from(context).cancel(intent.getIntExtra("notificationId", 0))
-        val mediaType: MediaType? = MediaType.parse("text/plain")
-        val reply = remoteInput.getCharSequence(KEY_TEXT_REPLY).toString()
+
+        val reply = remoteInput.getCharSequence("KEY_TEXT_REPLY").toString()
+        val notificationId = intent.getIntExtra("notificationId", 0)
         val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)?.id.toString()
+        val mediaType: MediaType? = MediaType.parse("text/plain")
         Utility.apiClient.sendMessage(
             RequestBody.create(mediaType, userId),
             RequestBody.create(mediaType, roomId),
@@ -57,21 +57,22 @@ class ChatMessagingBroadcast : BroadcastReceiver() {
             null
         ).enqueue(object : Callback<Message> {
             override fun onFailure(call: Call<Message>, t: Throwable) {
-                showToast(context, context.getString(R.string.an_error_occurred_message, t.message))
+                cancelNotification(notificationId, context, context.getString(R.string.an_error_occurred_message, t.message))
             }
 
             override fun onResponse(call: Call<Message>, response: Response<Message>) {
                 if (response.isSuccessful) {
-                    showToast(context, context.getString(R.string.you_message_has_been_sent))
+                    cancelNotification(notificationId, context, context.getString(R.string.you_message_has_been_sent))
                 } else {
-                    showToast(context, context.getString(R.string.an_error_occurred_message, response.errorBody()?.string()))
+                    cancelNotification(notificationId, context, context.getString(R.string.an_error_occurred_message, response.errorBody()?.string()))
                 }
             }
         })
         return true
     }
 
-    private fun showToast(context: Context, toast: String) {
+    private fun cancelNotification(notificationId: Int, context: Context, toast: String) {
+        NotificationManagerCompat.from(context).cancel(notificationId)
         Handler(Looper.getMainLooper()).post {
             Toast.makeText(context, toast, Toast.LENGTH_SHORT).show()
         }

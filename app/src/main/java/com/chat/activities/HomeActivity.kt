@@ -59,7 +59,12 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             tvPhone.text = mUser.phone
         }
         if (mUser.image != null) {
-            Picasso.get().load(Constants.BASE_URL + mUser.image).placeholder(R.drawable.ic_app).into(imvAvatar)
+            Picasso.get()
+                .load(Constants.BASE_URL + mUser.image)
+                .resize(200, 200)
+                .centerCrop()
+                .placeholder(R.drawable.ic_app)
+                .into(imvAvatar)
         } else {
             imvAvatar.setImageResource(R.drawable.ic_app)
         }

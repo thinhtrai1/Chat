@@ -38,6 +38,8 @@
     <string name="txt_tap_again_to_exit">Tap again to exit</string>
     <string name="back">Back</string>
     <string name="add_member">Add member</string>
+    <string name="reply">REPLY</string>
+    <string name="you_message_has_been_sent">You message has been sent</string>
     <string name="i_love_u">I miss you…</string>
     <string name="image">[Image…]</string>
     <string name="video">[Video…]</string>

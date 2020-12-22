@@ -5,6 +5,8 @@ import com.chat.BuildConfig
 object Constants {
     const val BASE_URL = "http://ducthinh-bestbus.000webhostapp.com/"
 
+    const val PREF_DARK_MODE = "PREF_DARK_MODE"
+
     const val PREF_USER_NAME = "PREF_USER_NAME"
     const val PREF_PASSWORD = "PREF_PASSWORD"
     const val PREF_USER = "PREF_USER"

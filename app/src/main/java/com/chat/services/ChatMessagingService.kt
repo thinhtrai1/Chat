@@ -98,7 +98,7 @@ class ChatMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(notificationTitle ?: getString(R.string.app_name))
             .setContentText(notificationMessage)
-            .setColor(ContextCompat.getColor(this, R.color.black))
+            .setColor(ContextCompat.getColor(this, R.color.colorWhite))
             .setAutoCancel(true)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))

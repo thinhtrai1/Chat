@@ -31,7 +31,7 @@
         android:fontFamily="sans-serif-condensed"
         android:singleLine="true"
         android:maxWidth="@dimen/message_image_height"
-        android:textColor="@color/white"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/text_13"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/cardAvatar"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
         android:text="12/11/2020 17:04"
-        android:textColor="@color/white"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/text_10"
         android:layout_marginStart="@dimen/margin_10"
         app:layout_constraintStart_toEndOf="@id/tvName"
@@ -58,7 +58,7 @@
         android:layout_marginEnd="@dimen/margin_10"
         android:fontFamily="sans-serif-condensed"
         android:text="12/11/2020 17:04"
-        android:textColor="@color/white"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/text_10"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingBottom="@dimen/margin_5"
@@ -96,7 +96,7 @@
                 android:paddingTop="@dimen/margin_5"
                 android:paddingBottom="@dimen/margin_7.5"
                 android:text="Do you love me?"
-                android:textColor="@color/white"
+                android:textColor="@color/colorText"
                 android:textSize="@dimen/text_12" />
 
             <androidx.cardview.widget.CardView

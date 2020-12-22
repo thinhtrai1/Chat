@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3E3E3E</color>
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="color_1">#636363</color>
-    <color name="color_2">#979797</color>
-    <color name="color_3">#CDCDCD</color>
+    <color name="colorPrimary">#DDDDDD</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="colorBackground">#F3F3F3</color>
+    <color name="colorItem">#FFFFFF</color>
+    <color name="colorText">#000000</color>
+    <color name="colorHint">#636363</color>
+    <color name="colorButton">#A5A5A5</color>
 </resources>

@@ -4,8 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margin_10"
+    app:cardElevation="@dimen/margin_5"
+    app:cardCornerRadius="@dimen/margin_5"
     android:layout_marginTop="@dimen/margin_10"
-    app:cardBackgroundColor="@color/color_2">
+    app:cardBackgroundColor="@color/colorItem">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:singleLine="true"
-                android:textColor="@color/white"
+                android:textColor="@color/colorText"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold" />
 
@@ -48,13 +50,14 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:singleLine="true"
-                android:textColor="@color/white"
+                android:textColor="@color/colorText"
                 android:textSize="@dimen/text_12"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <CheckBox
             android:id="@+id/cbSelect"
+            android:buttonTint="@color/colorBlack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
+import androidx.appcompat.app.AppCompatDelegate
 import com.chat.R
 import com.chat.fragments.BaseFragment
 import com.chat.fragments.ChatRoomFragment
@@ -67,6 +68,12 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
                 .into(imvAvatar)
         } else {
             imvAvatar.setImageResource(R.drawable.ic_app)
+        }
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            tvMode.text = getString(R.string.light_mode)
+        } else {
+            tvMode.text = getString(R.string.night_mode)
         }
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
@@ -151,7 +158,17 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
                 startActivity(Intent(this@HomeActivity, LoginActivity::class.java).putExtra("isUpdate", true))
             }
 
-            viewMode -> {}
+            viewMode -> {
+                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    Utility.sharedPreferences.edit().putInt(Constants.PREF_DARK_MODE, AppCompatDelegate.MODE_NIGHT_NO).apply()
+                    tvMode.text = getString(R.string.night_mode)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    Utility.sharedPreferences.edit().putInt(Constants.PREF_DARK_MODE, AppCompatDelegate.MODE_NIGHT_YES).apply()
+                    tvMode.text = getString(R.string.light_mode)
+                }
+            }
 
             viewLogout -> {
                 Utility.sharedPreferences.edit().clear().apply()
@@ -183,7 +200,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
     private var isExit = false
     override fun finish() {
         if (isExit) {
-        super.finish()
+            super.finish()
         } else {
             isExit = true
             Toast.makeText(this, getString(R.string.txt_tap_again_to_exit), Toast.LENGTH_SHORT).show()

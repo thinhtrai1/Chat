@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_1"
+    android:background="@color/colorBackground"
     android:clickable="true"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_20"
+        android:layout_marginVertical="@dimen/margin_15"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_horizontal"
         android:text="@string/add_chat_room"
         android:textAllCaps="true"
-        android:textColor="@color/white"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/text_18"
         android:textStyle="bold" />
 
@@ -41,9 +41,8 @@
                 <ImageView
                     android:id="@+id/imvAvatar"
                     android:layout_width="match_parent"
-                    android:alpha="0.1"
+                    android:alpha="0.2"
                     android:layout_height="match_parent"
-                    android:scaleType="center"
                     android:src="@drawable/ic_app" />
             </androidx.cardview.widget.CardView>
 
@@ -61,14 +60,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_10"
             android:layout_weight="1"
-            android:background="@drawable/bg_btn_register"
+            android:background="@drawable/bg_edit_text"
             android:fontFamily="sans-serif-condensed"
             android:hint="@string/room_name"
             android:imeOptions="actionDone"
             android:inputType="textCapWords"
             android:padding="@dimen/margin_10"
-            android:textColor="@color/white"
-            android:textColorHint="@color/color_3"
+            android:textColor="@color/colorText"
+            android:textColorHint="@color/colorHint"
             android:textSize="@dimen/text_15"
             android:textStyle="bold" />
     </LinearLayout>
@@ -77,8 +76,8 @@
         android:id="@+id/imvAddMember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_10"
-        android:padding="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_5"
+        android:padding="@dimen/margin_5"
         android:gravity="center_vertical">
 
         <TextView
@@ -86,7 +85,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/members"
-            android:textColor="@color/white"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/text_15"
             android:textStyle="bold" />
 
@@ -108,10 +107,11 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/white" />
+        android:background="@color/colorBlack" />
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
         android:layout_height="wrap_content">
 
         <Button
@@ -128,7 +128,7 @@
             android:paddingHorizontal="@dimen/margin_15"
             android:paddingVertical="@dimen/margin_10"
             android:text="@string/back"
-            android:textColor="@color/white"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/text_18"
             android:textStyle="bold" />
 
@@ -147,7 +147,7 @@
             android:paddingHorizontal="@dimen/margin_15"
             android:paddingVertical="@dimen/margin_10"
             android:text="@string/create"
-            android:textColor="@color/white"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/text_18"
             android:textStyle="bold" />
     </LinearLayout>

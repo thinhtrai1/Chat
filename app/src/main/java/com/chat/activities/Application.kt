@@ -2,6 +2,8 @@ package com.chat.activities
 
 import android.app.Application
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
+import com.chat.utils.Constants
 import com.chat.utils.Utility
 
 class Application : Application() {
@@ -9,5 +11,7 @@ class Application : Application() {
         super.onCreate()
 
         Utility.sharedPreferences = getSharedPreferences("BASE_APPLICATION", Context.MODE_PRIVATE)
+
+        AppCompatDelegate.setDefaultNightMode(Utility.sharedPreferences.getInt(Constants.PREF_DARK_MODE, AppCompatDelegate.MODE_NIGHT_YES))
     }
 }

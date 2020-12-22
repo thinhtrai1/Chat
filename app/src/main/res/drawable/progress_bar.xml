@@ -6,8 +6,8 @@
         android:thickness="@dimen/margin_5"
         android:useLevel="false">
         <gradient
-            android:endColor="@color/black"
-            android:startColor="@color/white"
+            android:endColor="@color/colorWhite"
+            android:startColor="@color/colorBlack"
             android:type="sweep" />
     </shape>
 </rotate>

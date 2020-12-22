@@ -86,14 +86,18 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                         mMessageList.clear()
                         mMessageList.addAll(it)
                         mAdapter.notifyDataSetChanged()
+                        if (it.size > 0) {
+                            rcvChat.scrollToPosition(it.size - 1)
+                            isLoadMore = it[0].isLoadMore
+                        }
                     } else {
                         mMessageList.addAll(0, it)
                         mAdapter.notifyItemRangeInserted(0, it.size)
-                    }
-                    if (it.size > 0) {
-                        rcvChat.post {
-                            rcvChat.smoothScrollToPosition(it.size - 1)
-                            isLoadMore = it[0].isLoadMore
+                        if (it.size > 0) {
+                            rcvChat.post {
+                                rcvChat.smoothScrollToPosition(it.size - 1)
+                                isLoadMore = it[0].isLoadMore
+                            }
                         }
                     }
                 }

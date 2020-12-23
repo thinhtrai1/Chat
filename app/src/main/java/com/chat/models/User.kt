@@ -1,6 +1,8 @@
 package com.chat.models
 
-class User {
+import java.io.Serializable
+
+class User: Serializable {
     val id = 0
     val name: String? = null
     val phone: String? = null

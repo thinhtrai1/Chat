@@ -20,6 +20,16 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        var preIntent: Intent? = null
+        Timer().schedule(500) {
+            if (preIntent != null) {
+                startActivity(preIntent)
+                finish()
+            } else {
+                preIntent = Intent()
+            }
+        }
+
         if (Utility.sharedPreferences.getString(Constants.PREF_USER_NAME, null) != null
             && Utility.sharedPreferences.getString(Constants.PREF_PASSWORD, null) != null) {
             Utility.apiClient.login(
@@ -28,9 +38,14 @@ class SplashActivity : AppCompatActivity() {
             ).enqueue(object : Callback<User> {
                 override fun onFailure(call: Call<User>, t: Throwable) {
                     showToast(t)
-                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java)
-                        .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra(Constants.EXTRA_ROOM_ID)))
-                    finish()
+                    val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                        .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra(Constants.EXTRA_ROOM_ID))
+                    if (preIntent == null) {
+                        preIntent = intent
+                    } else {
+                        startActivity(intent)
+                        finish()
+                    }
                 }
 
                 override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -41,22 +56,29 @@ class SplashActivity : AppCompatActivity() {
                                 .putString(Constants.PREF_PASSWORD, it.password)
                                 .putString(Constants.PREF_USER, Gson().toJson(it))
                                 .apply()
-                            startActivity(Intent(this@SplashActivity, HomeActivity::class.java)
-                                .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra("roomId")))
-                            finish()
+                            val intent = Intent(this@SplashActivity, HomeActivity::class.java)
+                                .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra("roomId"))
+                            if (preIntent == null) {
+                                preIntent = intent
+                            } else {
+                                startActivity(intent)
+                                finish()
+                            }
                         }
                     } else {
-                        startActivity(Intent(this@SplashActivity, LoginActivity::class.java)
-                            .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra("roomId")))
-                        finish()
+                        val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                            .putExtra(Constants.EXTRA_ROOM_ID, intent.getStringExtra("roomId"))
+                        if (preIntent == null) {
+                            preIntent = intent
+                        } else {
+                            startActivity(intent)
+                            finish()
+                        }
                     }
                 }
             })
         } else {
-            Timer().schedule(500) {
-                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-                finish()
-            }
+            preIntent = Intent(this@SplashActivity, LoginActivity::class.java)
         }
     }
 

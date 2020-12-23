@@ -155,10 +155,12 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             }
 
             viewUpdateProfile -> {
+                layoutContainer.closeDrawer(viewMenuRight)
                 startActivity(Intent(this@HomeActivity, LoginActivity::class.java).putExtra("isUpdate", true))
             }
 
             viewMode -> {
+                layoutContainer.closeDrawer(viewMenuRight)
                 if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     Utility.sharedPreferences.edit().putInt(Constants.PREF_DARK_MODE, AppCompatDelegate.MODE_NIGHT_NO).apply()

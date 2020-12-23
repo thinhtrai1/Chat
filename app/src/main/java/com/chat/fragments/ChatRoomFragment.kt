@@ -112,7 +112,7 @@ class ChatRoomFragment : BaseFragment(), Callback<ArrayList<ChatRoom>>, CreateRo
     }
 
     fun createRoom() {
-        (mContext as HomeActivity).addFragment(CreateRoomFragment(this, null))
+        (mContext as HomeActivity).addFragment(CreateRoomFragment.newInstance(this, -1))
     }
 
     override fun onCreated(position: Int, room: ChatRoom) {

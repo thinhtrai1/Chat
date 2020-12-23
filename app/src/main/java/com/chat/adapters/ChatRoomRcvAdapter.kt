@@ -59,14 +59,14 @@ class ChatRoomRcvAdapter(
             if (it.isHost) {
                 holder.imvSetting.visibility = View.VISIBLE
                 holder.imvSetting.setOnClickListener { _ ->
-                    (mContext as HomeActivity).addFragment(CreateRoomFragment(editCallback, it.id))
+                    (mContext as HomeActivity).addFragment(CreateRoomFragment.newInstance(editCallback, it.id))
                 }
             } else {
                 holder.imvSetting.visibility = View.GONE
             }
             holder.imageView.setOnClickListener { _ ->
                 if (it.isHost) {
-                    (mContext as HomeActivity).addFragment(CreateRoomFragment(editCallback, it.id))
+                    (mContext as HomeActivity).addFragment(CreateRoomFragment.newInstance(editCallback, it.id))
                 } else if (!it.image.isNullOrEmpty()) {
                     Dialog(mContext, android.R.style.Theme_Black_NoTitleBar).apply {
                         setContentView(ImageView(mContext).apply {

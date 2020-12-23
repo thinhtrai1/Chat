@@ -30,11 +30,28 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.Serializable
 
-class CreateRoomFragment(private val callback: IOnCreatedChatRoom, private val mRoomId: Int?): BaseFragment() {
+class CreateRoomFragment: BaseFragment() {
+    private var mRoomId = -1
     private val mMembers = ArrayList<User>()
-    private lateinit var mAdapter: UserRcvAdapter
     private var imageUri: Uri? = null
+    private lateinit var mAdapter: UserRcvAdapter
+    private lateinit var mCallback: IOnCreatedChatRoom
+
+    companion object {
+        fun newInstance(callback: IOnCreatedChatRoom, roomId: Int): CreateRoomFragment {
+            val bundle = Bundle()
+            bundle.putSerializable(CALLBACK, callback)
+            bundle.putInt(ROOM_ID, roomId)
+            return CreateRoomFragment().apply {
+                arguments = bundle
+            }
+        }
+
+        private const val CALLBACK = "CALLBACK"
+        private const val ROOM_ID = "ROOM_ID"
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_create_chat_room, container, false)
@@ -42,6 +59,9 @@ class CreateRoomFragment(private val callback: IOnCreatedChatRoom, private val m
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mCallback = arguments?.getSerializable(CALLBACK) as IOnCreatedChatRoom
+        mRoomId = arguments?.getInt(ROOM_ID) ?: -1
 
         mAdapter = UserRcvAdapter(mContext, mMembers, ArrayList(), false)
         rcvMember.adapter = mAdapter
@@ -61,7 +81,7 @@ class CreateRoomFragment(private val callback: IOnCreatedChatRoom, private val m
 
         imvAddMember.setOnClickListener {
             (activity as HomeActivity).addFragment(
-                SelectUserFragment(
+                SelectUserFragment.newInstance(
                     mMembers,
                     object : SelectUserFragment.IOnSelectedListener {
                         override fun onFinishSelected() {
@@ -80,6 +100,10 @@ class CreateRoomFragment(private val callback: IOnCreatedChatRoom, private val m
         }
 
         btnCreate.setOnClickListener {
+            if (edtName.text.isBlank()) {
+                edtName.error = getString(R.string.tv_please_enter_name)
+                return@setOnClickListener
+            }
             showLoading(true)
             var imageFile: MultipartBody.Part? = null
             imageUri?.getRealPath()?.let {
@@ -101,7 +125,7 @@ class CreateRoomFragment(private val callback: IOnCreatedChatRoom, private val m
                 override fun onResponse(call: Call<ChatRoom>, response: Response<ChatRoom>) {
                     if (response.isSuccessful) {
                         response.body()?.let {
-                            callback.onCreated(-1, it)
+                            mCallback.onCreated(-1, it)
                             activity?.supportFragmentManager?.popBackStackImmediate()
                         }
                     } else {
@@ -149,7 +173,7 @@ class CreateRoomFragment(private val callback: IOnCreatedChatRoom, private val m
         return null
     }
 
-    interface IOnCreatedChatRoom {
+    interface IOnCreatedChatRoom: Serializable {
         fun onCreated(position: Int, room: ChatRoom)
     }
 }

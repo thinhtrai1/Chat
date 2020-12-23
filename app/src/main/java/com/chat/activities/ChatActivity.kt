@@ -211,6 +211,10 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                         mRoom = it
                         ChatMessagingService.CURRENT_ROOM_ID = it.roomId
                         tvName.text = mRoom.name
+                        if (it.member.size > 1) {
+                            tvMemberNumber.visibility = View.VISIBLE
+                            tvMemberNumber.text = getString(R.string.has_member, it.member.size)
+                        }
                         Picasso.get().load(Constants.BASE_URL + mRoom.image).placeholder(R.drawable.ic_app)
                             .resize(200, 200).centerCrop().into(imvAvatar)
                         LocalBroadcastManager.getInstance(this@ChatActivity)

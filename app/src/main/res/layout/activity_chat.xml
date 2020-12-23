@@ -44,6 +44,7 @@
                 android:layout_marginEnd="@dimen/margin_10"
                 android:gravity="center"
                 android:orientation="vertical"
+                android:animateLayoutChanges="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -57,6 +58,17 @@
                     android:textColor="@color/colorText"
                     android:textSize="@dimen/text_25"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvMemberNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:transitionName="tvName"
+                    android:fontFamily="sans-serif-condensed"
+                    android:singleLine="true"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/text_12" />
             </LinearLayout>
 
             <LinearLayout
@@ -96,7 +108,7 @@
         <ImageView
             android:id="@+id/imvSearch"
             android:layout_width="@dimen/home_option_size"
-            android:layout_height="@dimen/home_option_size"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_search" />
     </LinearLayout>
 

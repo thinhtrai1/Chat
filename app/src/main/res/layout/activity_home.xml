@@ -118,13 +118,13 @@
             <ImageView
                 android:id="@+id/imvSearch"
                 android:layout_width="@dimen/home_option_size"
-                android:layout_height="@dimen/home_option_size"
+                android:layout_height="match_parent"
                 android:src="@drawable/ic_search" />
 
             <ImageView
                 android:id="@+id/imvMenu"
                 android:layout_width="@dimen/home_option_size"
-                android:layout_height="@dimen/home_option_size"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_5"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_menu" />

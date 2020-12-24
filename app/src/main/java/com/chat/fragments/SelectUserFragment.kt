@@ -1,6 +1,7 @@
 package com.chat.fragments
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_select_user.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.Serializable
 
 class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
     private val mMemberList = ArrayList<User>()
@@ -30,7 +30,7 @@ class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
         fun newInstance(selectedUser: ArrayList<User>, callback: IOnSelectedListener): SelectUserFragment {
             val bundle = Bundle()
             bundle.putSerializable(SELECTED_USER, selectedUser)
-            bundle.putSerializable(CALLBACK, callback)
+            bundle.putParcelable(CALLBACK, callback)
             return SelectUserFragment().apply {
                 arguments = bundle
             }
@@ -47,7 +47,7 @@ class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mCallback = arguments?.getSerializable(CALLBACK) as IOnSelectedListener
+        mCallback = arguments?.getParcelable<IOnSelectedListener>(CALLBACK) as IOnSelectedListener
         mSelectedUser = arguments?.getSerializable(SELECTED_USER) as ArrayList<User>
         mAdapter = UserRcvAdapter(mContext, mMemberList, mSelectedUser, true)
         mActivity = mContext as BaseActivity
@@ -74,11 +74,6 @@ class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
         }
     }
 
-    interface IOnSelectedListener: Serializable {
-        fun onFinishSelected()
-        fun onError(error: Any?)
-    }
-
     override fun onFailure(call: Call<ArrayList<User>>, t: Throwable) {
         mActivity.showLoading(false)
         mCallback.onError(t)
@@ -95,5 +90,10 @@ class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
             mCallback.onError(response.errorBody()?.string())
         }
         mActivity.showLoading(false)
+    }
+
+    interface IOnSelectedListener: Parcelable {
+        fun onFinishSelected()
+        fun onError(error: Any?)
     }
 }

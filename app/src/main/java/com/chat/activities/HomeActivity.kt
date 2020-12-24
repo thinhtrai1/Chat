@@ -48,7 +48,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        mFragmentManager.beginTransaction().replace(R.id.frameHome, ChatRoomFragment()).commit()
+        mFragmentManager.beginTransaction().replace(R.id.frameHome, ChatRoomFragment.newInstance()).commit()
         mDeviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
         mUser = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)
@@ -150,7 +150,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             viewAddChatRoom -> {
                 layoutContainer.closeDrawer(viewMenuRight)
                 if (mFragmentManager.fragments.last() is ChatRoomFragment) {
-                    (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom()
+                    (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom(-1)
                 }
             }
 

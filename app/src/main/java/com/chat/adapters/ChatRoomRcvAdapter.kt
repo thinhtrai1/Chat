@@ -9,8 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chat.R
-import com.chat.activities.HomeActivity
-import com.chat.fragments.CreateRoomFragment
 import com.chat.models.ChatRoom
 import com.chat.utils.Constants
 import com.chat.utils.Utility
@@ -18,8 +16,7 @@ import com.squareup.picasso.Picasso
 
 class ChatRoomRcvAdapter(
     private val mContext: Context,
-    private val onClickCallback: CreateRoomFragment.IOnCreatedChatRoom,
-    private val editCallback: CreateRoomFragment.IOnCreatedChatRoom,
+    private val onClickCallback: IOnItemClickListener,
     private val mRooms: ArrayList<ChatRoom>) :
     RecyclerView.Adapter<ChatRoomRcvAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -59,14 +56,14 @@ class ChatRoomRcvAdapter(
             if (it.isHost) {
                 holder.imvSetting.visibility = View.VISIBLE
                 holder.imvSetting.setOnClickListener { _ ->
-                    (mContext as HomeActivity).addFragment(CreateRoomFragment.newInstance(editCallback, it.id))
+                    onClickCallback.onClick(holder.bindingAdapterPosition, true)
                 }
             } else {
                 holder.imvSetting.visibility = View.GONE
             }
             holder.imageView.setOnClickListener { _ ->
                 if (it.isHost) {
-                    (mContext as HomeActivity).addFragment(CreateRoomFragment.newInstance(editCallback, it.id))
+                    onClickCallback.onClick(holder.bindingAdapterPosition, true)
                 } else if (!it.image.isNullOrEmpty()) {
                     Dialog(mContext, android.R.style.Theme_Black_NoTitleBar).apply {
                         setContentView(ImageView(mContext).apply {
@@ -75,9 +72,6 @@ class ChatRoomRcvAdapter(
                         show()
                     }
                 }
-            }
-            holder.itemView.setOnClickListener { _ ->
-                onClickCallback.onCreated(holder.adapterPosition, it)
             }
         }
     }
@@ -88,5 +82,15 @@ class ChatRoomRcvAdapter(
         internal val tvLastMessage: TextView = view.findViewById(R.id.tvMessage)
         internal val tvTime: TextView = view.findViewById(R.id.tvTime)
         internal val imvSetting: ImageView = view.findViewById(R.id.imvSetting)
+
+        init {
+            view.setOnClickListener {
+                onClickCallback.onClick(bindingAdapterPosition, false)
+            }
+        }
+    }
+
+    interface IOnItemClickListener {
+        fun onClick(position: Int, isEdit: Boolean)
     }
 }

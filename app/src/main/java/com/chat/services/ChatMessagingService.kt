@@ -142,18 +142,17 @@ class ChatMessagingService : FirebaseMessagingService() {
     private fun Bitmap.circle(): Bitmap {
         val mWidth = width //radius
         val output = Bitmap.createBitmap(mWidth, mWidth, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(output)
-        val color = "#BAB399"
         val paint = Paint()
-        val rect = Rect(0, 0, mWidth, mWidth)
         paint.isAntiAlias = true
         paint.isFilterBitmap = true
         paint.isDither = true
-        canvas.drawARGB(0, 0, 0, 0)
-        paint.color = Color.parseColor(color)
-        canvas.drawCircle(mWidth / 2 + 0.7f, mWidth / 2 + 0.7f, mWidth / 2 + 0.1f, paint)
+        paint.color = Color.parseColor("#BAB399")
         paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        val canvas = Canvas(output)
+        canvas.drawARGB(0, 0, 0, 0)
+        canvas.drawCircle(mWidth / 2 + 0.7f, mWidth / 2 + 0.7f, mWidth / 2 + 0.1f, paint)
 
+        val rect = Rect(0, 0, mWidth, mWidth)
         val newBitmap: Bitmap
         val rectSrc: Rect
         if (mWidth != height) {

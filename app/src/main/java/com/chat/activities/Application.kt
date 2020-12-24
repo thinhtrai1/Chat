@@ -10,7 +10,7 @@ class Application : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Utility.sharedPreferences = getSharedPreferences("BASE_APPLICATION", Context.MODE_PRIVATE)
+        Utility.sharedPreferences = getSharedPreferences("CHAT_APPLICATION", Context.MODE_PRIVATE)
 
         AppCompatDelegate.setDefaultNightMode(Utility.sharedPreferences.getInt(Constants.PREF_DARK_MODE, AppCompatDelegate.MODE_NIGHT_YES))
     }

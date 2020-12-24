@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +32,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.Serializable
 
 class CreateRoomFragment: BaseFragment() {
     private var mRoomId = -1
@@ -42,7 +43,7 @@ class CreateRoomFragment: BaseFragment() {
     companion object {
         fun newInstance(callback: IOnCreatedChatRoom, roomId: Int): CreateRoomFragment {
             val bundle = Bundle()
-            bundle.putSerializable(CALLBACK, callback)
+            bundle.putParcelable(CALLBACK, callback)
             bundle.putInt(ROOM_ID, roomId)
             return CreateRoomFragment().apply {
                 arguments = bundle
@@ -60,7 +61,7 @@ class CreateRoomFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mCallback = arguments?.getSerializable(CALLBACK) as IOnCreatedChatRoom
+        mCallback = arguments?.getParcelable<IOnCreatedChatRoom>(CALLBACK) as IOnCreatedChatRoom
         mRoomId = arguments?.getInt(ROOM_ID) ?: -1
 
         mAdapter = UserRcvAdapter(mContext, mMembers, ArrayList(), false)
@@ -94,6 +95,13 @@ class CreateRoomFragment: BaseFragment() {
                             } else {
                                 showAlert(error.toString())
                             }
+                        }
+
+                        override fun writeToParcel(p0: Parcel?, p1: Int) {
+                        }
+
+                        override fun describeContents(): Int {
+                            return 0
                         }
                     })
             )
@@ -173,7 +181,7 @@ class CreateRoomFragment: BaseFragment() {
         return null
     }
 
-    interface IOnCreatedChatRoom: Serializable {
+    interface IOnCreatedChatRoom: Parcelable {
         fun onCreated(position: Int, room: ChatRoom)
     }
 }

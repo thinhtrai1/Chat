@@ -1,6 +1,5 @@
 package com.chat.adapters
 
-import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +18,7 @@ class ChatRoomRcvAdapter(
     private val onClickCallback: IOnItemClickListener,
     private val mRooms: ArrayList<ChatRoom>) :
     RecyclerView.Adapter<ChatRoomRcvAdapter.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(mContext).inflate(R.layout.item_rcv_chat_room, parent, false)
@@ -55,23 +55,8 @@ class ChatRoomRcvAdapter(
             }
             if (it.isHost) {
                 holder.imvSetting.visibility = View.VISIBLE
-                holder.imvSetting.setOnClickListener { _ ->
-                    onClickCallback.onClick(holder.bindingAdapterPosition, true)
-                }
             } else {
                 holder.imvSetting.visibility = View.GONE
-            }
-            holder.imageView.setOnClickListener { _ ->
-                if (it.isHost) {
-                    onClickCallback.onClick(holder.bindingAdapterPosition, true)
-                } else if (!it.image.isNullOrEmpty()) {
-                    Dialog(mContext, android.R.style.Theme_Black_NoTitleBar).apply {
-                        setContentView(ImageView(mContext).apply {
-                            Picasso.get().load(Constants.BASE_URL + it.image).into(this)
-                        })
-                        show()
-                    }
-                }
             }
         }
     }
@@ -85,12 +70,12 @@ class ChatRoomRcvAdapter(
 
         init {
             view.setOnClickListener {
-                onClickCallback.onClick(bindingAdapterPosition, false)
+                onClickCallback.onClick(bindingAdapterPosition)
             }
         }
     }
 
     interface IOnItemClickListener {
-        fun onClick(position: Int, isEdit: Boolean)
+        fun onClick(position: Int)
     }
 }

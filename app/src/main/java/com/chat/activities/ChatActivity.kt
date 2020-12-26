@@ -87,17 +87,15 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                         mMessageList.addAll(it)
                         mAdapter.notifyDataSetChanged()
                         if (it.size > 0) {
-                            rcvChat.scrollToPosition(it.size - 1)
+                            rcvChat.scrollToPosition(it.lastIndex)
                             isLoadMore = it[0].isLoadMore
                         }
                     } else {
                         mMessageList.addAll(0, it)
                         mAdapter.notifyItemRangeInserted(0, it.size)
                         if (it.size > 0) {
-                            rcvChat.post {
-                                rcvChat.smoothScrollToPosition(it.size - 1)
-                                isLoadMore = it[0].isLoadMore
-                            }
+                            mLayoutManager.scrollToPositionWithOffset(it.lastIndex, 0)
+                            isLoadMore = it[0].isLoadMore
                         }
                     }
                 }
@@ -122,10 +120,8 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                         }
                         mMessageList.add(message)
                         mAdapter.notifyItemInserted(mMessageList.lastIndex)
-                        if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 4) {
-                            rcvChat.post {
-                                rcvChat.smoothScrollToPosition(mMessageList.lastIndex)
-                            }
+                        if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 3) {
+                            mLayoutManager.scrollToPositionWithOffset(mMessageList.lastIndex, 0)
                         }
                     }
                 } catch (e: NumberFormatException) {}
@@ -153,21 +149,14 @@ class ChatActivity : BaseActivity(), Callback<Message> {
         ).enqueue(mGetMessageCallback)
     }
 
-    override fun onStart() {
-        super.onStart()
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiverOpenRoomBroadcast, IntentFilter(Constants.ACTION_OPEN_ROOM))
-    }
-
-    override fun onDestroy() {
-        ChatMessagingService.CURRENT_ROOM_ID = -1
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverMessageBroadcast)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverOpenRoomBroadcast)
-        super.onDestroy()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+        mAdapter = ChatRcvAdapter(this, mMessageList, mUser.id)
+        mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rcvChat.adapter = mAdapter
+        rcvChat.layoutManager = mLayoutManager
 
         if (intent.getStringExtra(Constants.EXTRA_ROOM_ID) == null && intent.getStringExtra(Constants.EXTRA_ROOM) == null) {
             showToast(getString(R.string.data_error))
@@ -227,12 +216,10 @@ class ChatActivity : BaseActivity(), Callback<Message> {
         })
 
         loadData()
+        listener()
+    }
 
-        mAdapter = ChatRcvAdapter(this, mMessageList, mUser.id)
-        mLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rcvChat.adapter = mAdapter
-        rcvChat.layoutManager = mLayoutManager
-
+    private fun listener() {
         imvSearch.setOnClickListener {
             if (isSearch) {
                 mEarliestTime = 0
@@ -281,7 +268,7 @@ class ChatActivity : BaseActivity(), Callback<Message> {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (count > 0) {
+                if (s.toString().isNotBlank()) {
                     imvSend.setImageResource(R.drawable.ic_send_message)
                 } else {
                     imvSend.setImageResource(R.drawable.ic_photo)
@@ -306,6 +293,14 @@ class ChatActivity : BaseActivity(), Callback<Message> {
             }
         }
 
+        rcvChat.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) {
+                rcvChat.post {
+                    rcvChat.smoothScrollToPosition(mMessageList.lastIndex)
+                }
+            }
+        }
+
         rcvChat.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (isLoadMore && mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
@@ -317,6 +312,8 @@ class ChatActivity : BaseActivity(), Callback<Message> {
     }
 
     private fun sendMessage(type: Int, message: String?, file: File?) {
+        imvSend.visibility = View.GONE
+        progressBarSend.visibility = View.VISIBLE
         val mediaType: MediaType? = MediaType.parse("text/plain")
         var messageData: RequestBody? = null
         var fileData: MultipartBody.Part? = null
@@ -326,8 +323,6 @@ class ChatActivity : BaseActivity(), Callback<Message> {
             val mediaFileType: RequestBody = RequestBody.create(MediaType.parse("image/*"), file)
             fileData = MultipartBody.Part.createFormData("file", file.name, mediaFileType)
         }
-
-        showLoading(true)
         Utility.apiClient.sendMessage(
             RequestBody.create(mediaType, mUser.id.toString()),
             RequestBody.create(mediaType, mRoom.roomId.toString()),
@@ -338,25 +333,18 @@ class ChatActivity : BaseActivity(), Callback<Message> {
     }
 
     override fun onResponse(call: Call<Message>, response: Response<Message>) {
-        showLoading(false)
+        imvSend.visibility = View.VISIBLE
+        progressBarSend.visibility = View.GONE
         if (response.isSuccessful) {
             response.body()?.let {
                 mMessageList.add(it)
                 mAdapter.notifyItemInserted(mMessageList.lastIndex)
-                if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 4) {
-                    rcvChat.post {
-                        rcvChat.smoothScrollToPosition(mMessageList.lastIndex)
-                    }
+                if (mLayoutManager.findLastVisibleItemPosition() > mMessageList.size - 3) {
+                    mLayoutManager.scrollToPositionWithOffset(mMessageList.lastIndex, 0)
                 }
                 if (it.type == 0) {
                     edtMessage.setText("")
                 }
-
-                setResult(Activity.RESULT_OK, Intent()
-                    .putExtra(Constants.EXTRA_MESSAGE, it.message)
-                    .putExtra(Constants.EXTRA_MESSAGE_TYPE, it.type)
-                    .putExtra(Constants.EXTRA_MESSAGE_TIME, it.time)
-                )
             }
         } else {
             showAlert(response.errorBody()?.string())
@@ -364,7 +352,8 @@ class ChatActivity : BaseActivity(), Callback<Message> {
     }
 
     override fun onFailure(call: Call<Message>, t: Throwable) {
-        showLoading(false)
+        imvSend.visibility = View.VISIBLE
+        progressBarSend.visibility = View.GONE
         showAlert(t)
     }
 
@@ -398,5 +387,27 @@ class ChatActivity : BaseActivity(), Callback<Message> {
             }
         }
         return null
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiverOpenRoomBroadcast, IntentFilter(Constants.ACTION_OPEN_ROOM))
+    }
+
+    override fun onDestroy() {
+        ChatMessagingService.CURRENT_ROOM_ID = -1
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverMessageBroadcast)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiverOpenRoomBroadcast)
+        super.onDestroy()
+    }
+
+    override fun finish() {
+        mMessageList.last().let {
+            setResult(Activity.RESULT_OK, Intent()
+                .putExtra(Constants.EXTRA_MESSAGE, it.message)
+                .putExtra(Constants.EXTRA_MESSAGE_TYPE, it.type)
+                .putExtra(Constants.EXTRA_MESSAGE_TIME, it.time))
+        }
+        super.finish()
     }
 }

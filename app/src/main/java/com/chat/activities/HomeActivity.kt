@@ -150,7 +150,7 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             viewAddChatRoom -> {
                 layoutContainer.closeDrawer(viewMenuRight)
                 if (mFragmentManager.fragments.last() is ChatRoomFragment) {
-                    (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom(-1)
+                    (mFragmentManager.fragments.last() as ChatRoomFragment).createRoom()
                 }
             }
 

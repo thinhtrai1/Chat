@@ -41,7 +41,7 @@ class ChatRcvAdapter(
                 1 -> {
                     Picasso.get()
                         .load(Constants.BASE_URL + it.message)
-                        .resizeDimen(R.dimen.message_image_height, R.dimen.message_image_height)
+                        .resizeDimen(R.dimen.chat_message_image_height, R.dimen.chat_message_image_height)
                         .centerInside()
                         .into(holder.imvMessage)
                     holder.tvMessage.visibility = View.GONE

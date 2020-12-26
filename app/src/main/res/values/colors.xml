@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F1F1F1</color>
+    <color name="colorPrimary">#DCDCDC</color>
+
+    <color name="colorApp">#DCDCDC</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
 
@@ -8,5 +10,5 @@
     <color name="colorItem">#FFFFFF</color>
     <color name="colorText">#000000</color>
     <color name="colorHint">#A5A5A5</color>
-    <color name="colorButton">#A5A5A5</color>
+    <color name="colorButton">#636363</color>
 </resources>

@@ -34,24 +34,21 @@ import retrofit2.Response
 import java.io.File
 
 class CreateRoomFragment: BaseFragment() {
-    private var mRoomId = -1
     private val mMembers = ArrayList<User>()
     private var imageUri: Uri? = null
     private lateinit var mAdapter: UserRcvAdapter
     private lateinit var mCallback: IOnCreatedChatRoom
 
     companion object {
-        fun newInstance(callback: IOnCreatedChatRoom, roomId: Int): CreateRoomFragment {
+        fun newInstance(callback: IOnCreatedChatRoom): CreateRoomFragment {
             val bundle = Bundle()
             bundle.putParcelable(CALLBACK, callback)
-            bundle.putInt(ROOM_ID, roomId)
             return CreateRoomFragment().apply {
                 arguments = bundle
             }
         }
 
         private const val CALLBACK = "CALLBACK"
-        private const val ROOM_ID = "ROOM_ID"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,8 +58,7 @@ class CreateRoomFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mCallback = arguments?.getParcelable<IOnCreatedChatRoom>(CALLBACK) as IOnCreatedChatRoom
-        mRoomId = arguments?.getInt(ROOM_ID) ?: -1
+        mCallback = arguments?.getParcelable(CALLBACK)!!
 
         mAdapter = UserRcvAdapter(mContext, mMembers, ArrayList(), false)
         rcvMember.adapter = mAdapter
@@ -112,7 +108,7 @@ class CreateRoomFragment: BaseFragment() {
                 edtName.error = getString(R.string.tv_please_enter_name)
                 return@setOnClickListener
             }
-            showLoading(true)
+            showLoading(getString(R.string.creating))
             var imageFile: MultipartBody.Part? = null
             imageUri?.getRealPath()?.let {
                 val avatarRequest = RequestBody.create(MediaType.parse("image/*"), it)
@@ -133,7 +129,7 @@ class CreateRoomFragment: BaseFragment() {
                 override fun onResponse(call: Call<ChatRoom>, response: Response<ChatRoom>) {
                     if (response.isSuccessful) {
                         response.body()?.let {
-                            mCallback.onCreated(-1, it)
+                            mCallback.onCreated(it)
                             activity?.supportFragmentManager?.popBackStackImmediate()
                         }
                     } else {
@@ -182,6 +178,6 @@ class CreateRoomFragment: BaseFragment() {
     }
 
     interface IOnCreatedChatRoom: Parcelable {
-        fun onCreated(position: Int, room: ChatRoom)
+        fun onCreated(room: ChatRoom)
     }
 }

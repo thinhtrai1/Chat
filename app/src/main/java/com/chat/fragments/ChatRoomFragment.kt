@@ -74,24 +74,20 @@ class ChatRoomFragment : BaseFragment(), Callback<ArrayList<ChatRoom>> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showLoading(true)
         mAdapter = ChatRoomRcvAdapter(mContext, object : ChatRoomRcvAdapter.IOnItemClickListener {
-            override fun onClick(position: Int, isEdit: Boolean) {
-                if (isEdit) {
-                    createRoom(mChatRooms[position].id)
-                } else {
-                    startActivityForResult(
-                        Intent(mContext, ChatActivity::class.java)
-                            .putExtra(Constants.EXTRA_ROOM, Gson().toJson(mChatRooms[position])), 1997
-                    )
-                    mCurrentPositionChat = position
-                }
+            override fun onClick(position: Int) {
+                startActivityForResult(
+                    Intent(mContext, ChatActivity::class.java)
+                        .putExtra(Constants.EXTRA_ROOM, Gson().toJson(mChatRooms[position])), 1997
+                )
+                mCurrentPositionChat = position
             }
         }, mChatRooms)
         (view as RecyclerView).adapter = mAdapter
         view.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        loadData(mSearchKey)
 
+        showLoading(true)
+        loadData(mSearchKey)
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mReceiverRoomBroadcast, IntentFilter(Constants.ACTION_NEW_MESSAGE))
     }
 
@@ -125,18 +121,12 @@ class ChatRoomFragment : BaseFragment(), Callback<ArrayList<ChatRoom>> {
         showLoading(false)
     }
 
-    fun createRoom(id: Int) {
+    fun createRoom() {
         (mContext as HomeActivity).addFragment(CreateRoomFragment.newInstance(object : CreateRoomFragment.IOnCreatedChatRoom {
-            override fun onCreated(position: Int, room: ChatRoom) {
-                if (position == -1) {
-                    mChatRooms.add(0, room)
-                    mAdapter.notifyDataSetChanged()
-                    showToast(getString(R.string.created_room_successfully))
-                } else {
-                    mChatRooms[position] = room
-                    mAdapter.notifyDataSetChanged()
-                    showToast(getString(R.string.updated_room_successfully))
-                }
+            override fun onCreated(room: ChatRoom) {
+                mChatRooms.add(0, room)
+                mAdapter.notifyDataSetChanged()
+                showToast(getString(R.string.created_room_successfully))
             }
 
             override fun writeToParcel(p0: Parcel?, p1: Int) {
@@ -145,7 +135,7 @@ class ChatRoomFragment : BaseFragment(), Callback<ArrayList<ChatRoom>> {
             override fun describeContents(): Int {
                 return 0
             }
-        }, id))
+        }))
     }
 
     override fun onDestroy() {
@@ -162,14 +152,16 @@ class ChatRoomFragment : BaseFragment(), Callback<ArrayList<ChatRoom>> {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == 1997) {
-                mChatRooms[mCurrentPositionChat].lastMessage = data.getStringExtra(Constants.EXTRA_MESSAGE)
-                mChatRooms[mCurrentPositionChat].lastMessageType = data.getIntExtra(Constants.EXTRA_MESSAGE_TYPE, 0)
-                mChatRooms[mCurrentPositionChat].lastMessageTime = data.getLongExtra(Constants.EXTRA_MESSAGE_TIME, 0L)
-                mAdapter.notifyItemChanged(mCurrentPositionChat)
-                if (mCurrentPositionChat != 0) {
-                    Collections.swap(mChatRooms, 0, mCurrentPositionChat)
-                    mAdapter.notifyItemMoved(0, mCurrentPositionChat)
-                    mCurrentPositionChat = 0
+                if (mChatRooms[mCurrentPositionChat].lastMessageTime != data.getLongExtra(Constants.EXTRA_MESSAGE_TIME, 0L)) {
+                    mChatRooms[mCurrentPositionChat].lastMessage = data.getStringExtra(Constants.EXTRA_MESSAGE)
+                    mChatRooms[mCurrentPositionChat].lastMessageType = data.getIntExtra(Constants.EXTRA_MESSAGE_TYPE, 0)
+                    mChatRooms[mCurrentPositionChat].lastMessageTime = data.getLongExtra(Constants.EXTRA_MESSAGE_TIME, 0L)
+                    mAdapter.notifyItemChanged(mCurrentPositionChat)
+                    if (mCurrentPositionChat != 0) {
+                        Collections.swap(mChatRooms, 0, mCurrentPositionChat)
+                        mAdapter.notifyItemMoved(0, mCurrentPositionChat)
+                        mCurrentPositionChat = 0
+                    }
                 }
             }
         }

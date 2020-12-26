@@ -4,11 +4,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
 import com.chat.R
+import kotlinx.android.synthetic.main.progress_dialog.*
 import java.io.IOException
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -19,21 +18,25 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         mProgressDialog = Dialog(this)
-        mProgressDialog.setContentView(ProgressBar(this).apply {
-            indeterminateDrawable = ResourcesCompat.getDrawable(resources, R.drawable.progress_bar, null)
-        })
+        mProgressDialog.setContentView(R.layout.progress_dialog)
         mProgressDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         mProgressDialog.setCancelable(false)
 
         mAlertDialog = AlertDialog.Builder(this).setPositiveButton(android.R.string.ok, null)
     }
 
-    fun showLoading(isLoading: Boolean) {
+    protected fun showLoading(isLoading: Boolean) {
         if (isLoading) {
+            mProgressDialog.tvMessage.text = getString(R.string.loading)
             mProgressDialog.show()
         } else {
             mProgressDialog.dismiss()
         }
+    }
+
+    protected fun showLoading(message: String?) {
+        mProgressDialog.tvMessage.text = message
+        mProgressDialog.show()
     }
 
     protected fun showToast(message: String?) {

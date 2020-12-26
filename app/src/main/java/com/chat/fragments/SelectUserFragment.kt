@@ -22,7 +22,6 @@ import retrofit2.Response
 class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
     private val mMemberList = ArrayList<User>()
     private lateinit var mAdapter: UserRcvAdapter
-    private lateinit var mActivity: BaseActivity
     private lateinit var mSelectedUser: ArrayList<User>
     private lateinit var mCallback: IOnSelectedListener
 
@@ -47,25 +46,24 @@ class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mCallback = arguments?.getParcelable<IOnSelectedListener>(CALLBACK) as IOnSelectedListener
+        mCallback = arguments?.getParcelable(CALLBACK)!!
         mSelectedUser = arguments?.getSerializable(SELECTED_USER) as ArrayList<User>
         mAdapter = UserRcvAdapter(mContext, mMemberList, mSelectedUser, true)
-        mActivity = mContext as BaseActivity
 
         rcvSelectMember.adapter = mAdapter
         rcvSelectMember.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         btnCancel.setOnClickListener {
-            mActivity.supportFragmentManager.popBackStackImmediate()
+            activity?.supportFragmentManager?.popBackStackImmediate()
         }
         btnDone.setOnClickListener {
-            mActivity.supportFragmentManager.popBackStackImmediate()
+            activity?.supportFragmentManager?.popBackStackImmediate()
             mCallback.onFinishSelected()
         }
 
         edtSearch.setOnEditorActionListener { textView, i, _ ->
             if (i == EditorInfo.IME_ACTION_SEARCH) {
-                mActivity.showLoading(true)
+                showLoading(true)
                 val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id
                 Utility.apiClient.getUser(userId, textView.text.toString()).enqueue(this)
                 return@setOnEditorActionListener true
@@ -75,7 +73,7 @@ class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
     }
 
     override fun onFailure(call: Call<ArrayList<User>>, t: Throwable) {
-        mActivity.showLoading(false)
+        showLoading(false)
         mCallback.onError(t)
     }
 
@@ -89,7 +87,7 @@ class SelectUserFragment : BaseFragment(), Callback<ArrayList<User>> {
         } else {
             mCallback.onError(response.errorBody()?.string())
         }
-        mActivity.showLoading(false)
+        showLoading(false)
     }
 
     interface IOnSelectedListener: Parcelable {

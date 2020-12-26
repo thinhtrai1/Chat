@@ -46,4 +46,6 @@
     <string name="video">[Video…]</string>
     <string name="audio">[Audio…]</string>
     <string name="has_member">(%1$d members)</string>
+    <string name="loading">Loading…</string>
+    <string name="creating">Creating…</string>
 </resources>

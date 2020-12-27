@@ -40,7 +40,7 @@
         android:textStyle="bold"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorHint"
-        android:textSize="@dimen/text_14"
+        android:textSize="@dimen/text_large"
         android:visibility="gone" />
 
     <EditText
@@ -54,7 +54,7 @@
         android:padding="@dimen/margin_10"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorHint"
-        android:textSize="@dimen/text_14"
+        android:textSize="@dimen/text_large"
         android:textStyle="bold" />
 
     <EditText
@@ -68,7 +68,7 @@
         android:padding="@dimen/margin_10"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorHint"
-        android:textSize="@dimen/text_14"
+        android:textSize="@dimen/text_large"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -83,7 +83,7 @@
         android:padding="@dimen/margin_10"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorHint"
-        android:textSize="@dimen/text_14"
+        android:textSize="@dimen/text_large"
         android:textStyle="bold" />
 
     <EditText
@@ -97,7 +97,7 @@
         android:padding="@dimen/margin_10"
         android:textColor="@color/colorText"
         android:textColorHint="@color/colorHint"
-        android:textSize="@dimen/text_14"
+        android:textSize="@dimen/text_large"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -113,7 +113,7 @@
         android:paddingVertical="@dimen/margin_10"
         android:text="@string/login"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_18"
+        android:textSize="@dimen/text_title"
         android:textStyle="bold" />
 
     <TextView
@@ -126,5 +126,5 @@
         android:paddingVertical="@dimen/margin_7.5"
         android:text="@string/register"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_13" />
+        android:textSize="@dimen/text_12" />
 </LinearLayout>

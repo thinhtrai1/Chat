@@ -30,6 +30,11 @@ class ChatRoomRcvAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position == 0) {
+            holder.viewSpace.visibility = View.VISIBLE
+        } else {
+            holder.viewSpace.visibility = View.GONE
+        }
         mRooms[position].let {
             if (!it.image.isNullOrEmpty()) {
                 Picasso.get().load(Constants.BASE_URL + it.image).placeholder(R.drawable.ic_app)
@@ -67,6 +72,7 @@ class ChatRoomRcvAdapter(
         internal val tvLastMessage: TextView = view.findViewById(R.id.tvMessage)
         internal val tvTime: TextView = view.findViewById(R.id.tvTime)
         internal val imvSetting: ImageView = view.findViewById(R.id.imvSetting)
+        internal val viewSpace: View = view.findViewById(R.id.viewSpaceTop)
 
         init {
             view.setOnClickListener {

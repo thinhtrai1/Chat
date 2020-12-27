@@ -1,11 +1,8 @@
 <resources>
-    <dimen name="text_10">10sp</dimen>
+    <dimen name="text_small">10sp</dimen>
     <dimen name="text_12">12sp</dimen>
-    <dimen name="text_13">13sp</dimen>
-    <dimen name="text_14">14sp</dimen>
-    <dimen name="text_15">15sp</dimen>
-    <dimen name="text_18">18sp</dimen>
-    <dimen name="text_25">25sp</dimen>
+    <dimen name="text_large">14sp</dimen>
+    <dimen name="text_title">18sp</dimen>
 
     <dimen name="margin_5">5dp</dimen>
     <dimen name="margin_2.5">2.5dp</dimen>
@@ -23,7 +20,8 @@
     <dimen name="home_option_radius">15dp</dimen>
     <dimen name="home_room_size">50dp</dimen>
     <dimen name="home_room_radius">25dp</dimen>
+    <dimen name="home_right_drawer_width">250dp</dimen>
 
-    <dimen name="progress_dialog_height">60dp</dimen>
+    <dimen name="progress_bar_size">40dp</dimen>
     <dimen name="chat_message_image_height">150dp</dimen>
 </resources>

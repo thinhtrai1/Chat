@@ -61,12 +61,13 @@ class ChatRcvAdapter(
                 }
             }
 
+            val adapterPosition = holder.bindingAdapterPosition
             if (it.senderId == mUserId) {
                 holder.tvMessage.isSelected = true
                 holder.tvTime1.visibility = View.GONE
                 holder.groupMessage1.gravity = Gravity.END
                 holder.groupMessage2.gravity = Gravity.END
-                if (holder.adapterPosition > 0 && mList[holder.adapterPosition -1].senderId == mUserId && mList[holder.adapterPosition -1].time + 180000 > it.time) {
+                if (adapterPosition > 0 && mList[adapterPosition -1].senderId == mUserId && mList[adapterPosition -1].time + 180000 > it.time) {
                     holder.tvName.visibility = View.GONE
                     holder.imvAvatar.visibility = View.GONE
                     holder.tvTime2.visibility = View.GONE
@@ -81,8 +82,8 @@ class ChatRcvAdapter(
                 holder.tvTime2.visibility = View.GONE
                 holder.groupMessage1.gravity = Gravity.START
                 holder.groupMessage2.gravity = Gravity.START
-                if (holder.adapterPosition > 0 && mList[holder.adapterPosition -1].senderId == it.senderId) {
-                    if (mList[holder.adapterPosition -1].time + 180000 > it.time) {
+                if (adapterPosition > 0 && mList[adapterPosition -1].senderId == it.senderId) {
+                    if (mList[adapterPosition -1].time + 180000 > it.time) {
                         holder.imvAvatar.visibility = View.GONE
                         holder.tvName.visibility = View.GONE
                         holder.tvTime1.visibility = View.GONE
@@ -110,6 +111,11 @@ class ChatRcvAdapter(
                     holder.tvTime1.visibility = View.VISIBLE
                     holder.tvTime1.text = Utility.getTimeDisplayString(it.time)
                 }
+            }
+            if (adapterPosition == 0 && it.senderId != mUserId) {
+                holder.itemView.setPadding(0, mContext.resources.getDimensionPixelSize(R.dimen.margin_10), 0, 0)
+            } else {
+                holder.itemView.setPadding(0, 0, 0, 0)
             }
         }
     }

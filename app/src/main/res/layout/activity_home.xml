@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorApp"
+            android:background="@color/colorPrimary"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/margin_10"
             android:paddingTop="@dimen/margin_5"
@@ -57,7 +57,7 @@
                         android:fontFamily="sans-serif-condensed"
                         android:singleLine="true"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/text_15"
+                        android:textSize="@dimen/text_large"
                         android:textStyle="bold" />
 
                     <TextView
@@ -103,7 +103,7 @@
                         android:inputType="text"
                         android:textColor="@color/colorText"
                         android:textColorHint="@color/colorHint"
-                        android:textSize="@dimen/text_15"
+                        android:textSize="@dimen/text_large"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -144,7 +144,7 @@
 
     <LinearLayout
         android:id="@+id/viewMenuRight"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/home_right_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:background="@color/colorBackground"
@@ -180,7 +180,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/add_chat_room"
                 android:textColor="@color/colorText"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_large"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -203,7 +203,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/update_profile"
                 android:textColor="@color/colorText"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_large"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -227,7 +227,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/light_mode"
                 android:textColor="@color/colorText"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_large"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -250,7 +250,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/logout"
                 android:textColor="@color/colorText"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_large"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>

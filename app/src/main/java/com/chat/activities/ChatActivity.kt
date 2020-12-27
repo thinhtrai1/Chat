@@ -93,6 +93,7 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                     } else {
                         mMessageList.addAll(0, it)
                         mAdapter.notifyItemRangeInserted(0, it.size)
+                        mAdapter.notifyItemChanged(it.size)
                         if (it.size > 0) {
                             mLayoutManager.scrollToPositionWithOffset(it.lastIndex, 0)
                             isLoadMore = it[0].isLoadMore
@@ -402,7 +403,7 @@ class ChatActivity : BaseActivity(), Callback<Message> {
     }
 
     override fun finish() {
-        mMessageList.last().let {
+        mMessageList.lastOrNull()?.let {
             setResult(Activity.RESULT_OK, Intent()
                 .putExtra(Constants.EXTRA_MESSAGE, it.message)
                 .putExtra(Constants.EXTRA_MESSAGE_TYPE, it.type)

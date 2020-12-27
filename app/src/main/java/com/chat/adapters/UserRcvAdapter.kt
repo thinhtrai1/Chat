@@ -31,6 +31,11 @@ class UserRcvAdapter(private val context: Context,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (position == 0) {
+            holder.viewSpace.visibility = View.VISIBLE
+        } else {
+            holder.viewSpace.visibility = View.GONE
+        }
         mUsers[position].let {
             if (it.image != null) {
                 Picasso.get().load(Constants.BASE_URL + it.image).placeholder(R.drawable.ic_app)
@@ -71,5 +76,6 @@ class UserRcvAdapter(private val context: Context,
         internal val tvEmail: TextView = view.findViewById(R.id.tvEmail)
         internal val cbSelect: CheckBox = view.findViewById(R.id.cbSelect)
         internal val imvDelete: ImageView = view.findViewById(R.id.imvDelete)
+        internal val viewSpace: View = view.findViewById(R.id.viewSpaceTop)
     }
 }

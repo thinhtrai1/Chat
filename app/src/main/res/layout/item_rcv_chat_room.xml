@@ -1,91 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/margin_10"
-    app:cardElevation="@dimen/margin_5"
-    app:cardCornerRadius="@dimen/margin_5"
-    android:layout_marginTop="@dimen/margin_10"
-    app:cardBackgroundColor="@color/colorItem">
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <View
+        android:id="@+id/viewSpaceTop"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/margin_10" />
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/margin_10"
-        android:paddingBottom="@dimen/margin_10">
+        android:layout_marginHorizontal="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
+        app:cardBackgroundColor="@color/colorItem"
+        app:cardCornerRadius="@dimen/margin_5"
+        app:cardElevation="@dimen/margin_5">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardImage"
-            android:layout_width="@dimen/home_room_size"
-            android:layout_height="@dimen/home_room_size"
-            android:layout_marginVertical="@dimen/margin_10"
-            app:cardElevation="0dp"
-            app:cardCornerRadius="@dimen/home_room_radius"
-            app:layout_constraintBottom_toBottomOf="@id/tvMessage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvName">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardImage"
+                android:layout_width="@dimen/home_room_size"
+                android:layout_height="@dimen/home_room_size"
+                android:layout_marginVertical="@dimen/margin_10"
+                app:cardCornerRadius="@dimen/home_room_radius"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/tvMessage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvName">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_app" />
+            </androidx.cardview.widget.CardView>
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_app" />
-        </androidx.cardview.widget.CardView>
+                android:id="@+id/imvSetting"
+                android:layout_width="@dimen/home_option_size"
+                android:layout_height="@dimen/home_option_size"
+                android:layout_marginEnd="@dimen/margin_2.5"
+                android:layout_marginBottom="@dimen/home_option_size"
+                android:padding="@dimen/margin_2.5"
+                android:src="@drawable/ic_setting"
+                app:layout_constraintBottom_toBottomOf="@id/cardImage"
+                app:layout_constraintEnd_toStartOf="@id/tvName" />
 
-        <ImageView
-            android:id="@+id/imvSetting"
-            android:layout_width="@dimen/home_option_size"
-            android:layout_height="@dimen/home_option_size"
-            android:src="@drawable/ic_setting"
-            android:padding="@dimen/margin_2.5"
-            android:layout_marginBottom="@dimen/home_option_size"
-            android:layout_marginEnd="@dimen/margin_2.5"
-            app:layout_constraintEnd_toStartOf="@id/tvName"
-            app:layout_constraintBottom_toBottomOf="@id/cardImage" />
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_2.5"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="bottom"
+                android:singleLine="true"
+                android:text="Chat App"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/text_large"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cardImage"
+                app:layout_constraintTop_toBottomOf="@id/tvTime" />
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="bottom"
-            android:text="Chat App"
-            android:singleLine="true"
-            android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_2.5"
-            android:textColor="@color/colorText"
-            android:textSize="@dimen/text_15"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cardImage"
-            app:layout_constraintTop_toBottomOf="@id/tvTime" />
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:singleLine="true"
+                android:text="first message"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/text_12"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tvName"
+                app:layout_constraintTop_toBottomOf="@id/tvName" />
 
-        <TextView
-            android:id="@+id/tvMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="first message"
-            android:singleLine="true"
-            android:textColor="@color/colorText"
-            android:textSize="@dimen/text_12"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tvName"
-            app:layout_constraintTop_toBottomOf="@id/tvName" />
-
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:text="15/12/2020 21:09"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_7.5"
-            android:fontFamily="sans-serif-condensed"
-            android:textColor="@color/colorText"
-            android:textSize="@dimen/text_12"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_7.5"
+                android:fontFamily="sans-serif-condensed"
+                android:text="15/12/2020 21:09"
+                android:textColor="@color/colorText"
+                android:textSize="@dimen/text_12"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

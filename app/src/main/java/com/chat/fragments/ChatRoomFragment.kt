@@ -160,6 +160,8 @@ class ChatRoomFragment : BaseFragment(), Callback<ArrayList<ChatRoom>> {
                     if (mCurrentPositionChat != 0) {
                         Collections.swap(mChatRooms, 0, mCurrentPositionChat)
                         mAdapter.notifyItemMoved(0, mCurrentPositionChat)
+                        mAdapter.notifyItemChanged(0)
+                        mAdapter.notifyItemChanged(mCurrentPositionChat)
                         mCurrentPositionChat = 0
                     }
                 }

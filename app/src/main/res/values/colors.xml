@@ -2,10 +2,9 @@
 <resources>
     <color name="colorPrimary">#DCDCDC</color>
 
-    <color name="colorApp">#DCDCDC</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
-
+    <color name="colorSplash">#3E3E3E</color>
     <color name="colorBackground">#F3F3F3</color>
     <color name="colorItem">#FFFFFF</color>
     <color name="colorText">#000000</color>

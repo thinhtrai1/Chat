@@ -76,17 +76,17 @@ class HomeActivity : BaseActivity(), View.OnClickListener {
             tvMode.text = getString(R.string.night_mode)
         }
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener {
-            Log.e("NEW_FCM_TOKEN", it.result ?: "")
-            val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id
-            Utility.apiClient.updateFireBaseToken(userId, mDeviceId, it.result ?: "").enqueue(object : Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                }
-
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                }
-            })
-        }
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+//            Log.e("NEW_FCM_TOKEN", it.result ?: "")
+//            val userId = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id
+//            Utility.apiClient.updateFireBaseToken(userId, mDeviceId, it.result ?: "").enqueue(object : Callback<ResponseBody> {
+//                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                }
+//
+//                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                }
+//            })
+//        }
 
         edtSearch.setOnEditorActionListener { textView, i, _ ->
             if (i == EditorInfo.IME_ACTION_SEARCH) {

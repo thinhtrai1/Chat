@@ -16,33 +16,33 @@
         android:text="@string/add_chat_room"
         android:textAllCaps="true"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_18"
+        android:textSize="@dimen/text_title"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/margin_10"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/margin_10">
 
         <FrameLayout
-            android:background="@drawable/bg_round_white"
-            android:padding="2dp"
             android:layout_width="@dimen/home_avatar_size"
-            android:layout_height="@dimen/home_avatar_size">
+            android:layout_height="@dimen/home_avatar_size"
+            android:background="@drawable/bg_round_white"
+            android:padding="2dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                app:cardBackgroundColor="@android:color/transparent"
-                app:cardElevation="0dp"
                 android:layout_height="match_parent"
-                app:cardCornerRadius="@dimen/home_avatar_radius">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="@dimen/home_avatar_radius"
+                app:cardElevation="0dp">
 
                 <ImageView
                     android:id="@+id/imvAvatar"
                     android:layout_width="match_parent"
-                    android:alpha="0.2"
                     android:layout_height="match_parent"
+                    android:alpha="0.2"
                     android:src="@drawable/ic_app" />
             </androidx.cardview.widget.CardView>
 
@@ -68,7 +68,7 @@
             android:padding="@dimen/margin_10"
             android:textColor="@color/colorText"
             android:textColorHint="@color/colorHint"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_large"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -77,8 +77,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_5"
-        android:padding="@dimen/margin_5"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/margin_10"
+        android:paddingVertical="@dimen/margin_5">
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,14 +87,14 @@
             android:fontFamily="sans-serif-condensed"
             android:text="@string/members"
             android:textColor="@color/colorText"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_large"
             android:textStyle="bold" />
 
         <ImageView
             android:layout_width="@dimen/home_option_size"
             android:layout_height="@dimen/home_option_size"
-            android:background="@drawable/bg_round_white"
             android:layout_marginStart="@dimen/margin_10"
+            android:background="@drawable/bg_round_white"
             android:padding="@dimen/margin_7.5"
             android:src="@drawable/ic_add" />
     </LinearLayout>
@@ -106,13 +107,13 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="@color/colorBlack" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:background="@color/colorApp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
 
         <Button
             android:id="@+id/btnBack"
@@ -129,7 +130,7 @@
             android:paddingVertical="@dimen/margin_10"
             android:text="@string/back"
             android:textColor="@color/colorText"
-            android:textSize="@dimen/text_18"
+            android:textSize="@dimen/text_title"
             android:textStyle="bold" />
 
         <Button
@@ -148,7 +149,7 @@
             android:paddingVertical="@dimen/margin_10"
             android:text="@string/create"
             android:textColor="@color/colorText"
-            android:textSize="@dimen/text_18"
+            android:textSize="@dimen/text_title"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

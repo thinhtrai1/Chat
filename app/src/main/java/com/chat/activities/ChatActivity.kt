@@ -205,6 +205,9 @@ class ChatActivity : BaseActivity(), Callback<Message> {
                             tvMemberNumber.visibility = View.VISIBLE
                             tvMemberNumber.text = getString(R.string.has_member, it.member.size)
                         }
+                        if (it.isHost) {
+                            imvMenu.visibility = View.VISIBLE
+                        }
                         Picasso.get().load(Constants.BASE_URL + mRoom.image).placeholder(R.drawable.ic_app)
                             .resize(200, 200).centerCrop().into(imvAvatar)
                         LocalBroadcastManager.getInstance(this@ChatActivity)
@@ -221,6 +224,8 @@ class ChatActivity : BaseActivity(), Callback<Message> {
     }
 
     private fun listener() {
+        imvMenu.setOnClickListener {  }
+
         imvSearch.setOnClickListener {
             if (isSearch) {
                 mEarliestTime = 0

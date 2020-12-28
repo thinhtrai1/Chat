@@ -32,7 +32,7 @@
         android:singleLine="true"
         android:maxWidth="@dimen/chat_message_image_height"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_12"
+        android:textSize="@dimen/text_normal"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/cardAvatar"
         app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +97,7 @@
                 android:paddingBottom="@dimen/margin_7.5"
                 android:text="Do you love me?"
                 android:textColor="@color/colorText"
-                android:textSize="@dimen/text_12" />
+                android:textSize="@dimen/text_normal" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardMessage"

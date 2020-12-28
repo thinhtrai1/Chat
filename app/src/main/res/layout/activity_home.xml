@@ -67,7 +67,7 @@
                         android:fontFamily="sans-serif-condensed"
                         android:singleLine="true"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/text_12"
+                        android:textSize="@dimen/text_normal"
                         android:textStyle="bold" />
 
                     <TextView
@@ -77,7 +77,7 @@
                         android:fontFamily="sans-serif-condensed"
                         android:singleLine="true"
                         android:textColor="@color/colorText"
-                        android:textSize="@dimen/text_12"
+                        android:textSize="@dimen/text_normal"
                         android:textStyle="bold" />
                 </LinearLayout>
 

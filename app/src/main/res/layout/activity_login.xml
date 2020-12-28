@@ -126,5 +126,5 @@
         android:paddingVertical="@dimen/margin_7.5"
         android:text="@string/register"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_12" />
+        android:textSize="@dimen/text_normal" />
 </LinearLayout>

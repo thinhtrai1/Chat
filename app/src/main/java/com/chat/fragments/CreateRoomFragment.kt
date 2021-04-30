@@ -114,11 +114,12 @@ class CreateRoomFragment: BaseFragment() {
                 val avatarRequest = RequestBody.create(MediaType.parse("image/*"), it)
                 imageFile = MultipartBody.Part.createFormData("image", it.name, avatarRequest)
             }
+            val user = Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java)
             val mediaType = MediaType.parse("text/plain")
             Utility.apiClient.createRoom(
-                Gson().fromJson(Utility.sharedPreferences.getString(Constants.PREF_USER, ""), User::class.java).id,
+                user.id,
                 RequestBody.create(mediaType, edtName.text.toString().trim()),
-                RequestBody.create(mediaType, Gson().toJson(mMembers.map { it.id })),
+                RequestBody.create(mediaType, Gson().toJson(mMembers.apply { add(user) }.map { it.id })),
                 imageFile
             ).enqueue(object : Callback<ChatRoom> {
                 override fun onFailure(call: Call<ChatRoom>, t: Throwable) {

@@ -300,7 +300,7 @@ class ChatActivity : BaseActivity(), Callback<Message> {
         }
 
         rcvChat.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-            if (bottom < oldBottom) {
+            if (mMessageList.isNotEmpty() && bottom < oldBottom) {
                 rcvChat.post {
                     rcvChat.smoothScrollToPosition(mMessageList.lastIndex)
                 }
